@@ -1,0 +1,46 @@
+{
+  "selling_point": [
+    {
+      "id": 1,
+      "static_point": true,
+      "name": "Point 1",
+      "description": "This is point 1",
+      "product_type": "comida"
+    },
+    {
+      "id": 2,
+      "static_point": false,
+      "name": "Point 2",
+      "description": "This is point 2",
+      "product_type": "utiles"
+    },
+    {
+      "id": 3,
+      "static_point": true,
+      "name": "Point 3",
+      "description": "This is point 3",
+      "product_type": "artesanias"
+    },
+    {
+      "id": 4,
+      "static_point": false,
+      "name": "Point 4",
+      "description": "This is point 4",
+      "product_type": "libros"
+    }
+  ],
+  "user": [
+    {
+      "id": 1,
+      "name": "Juan",
+      "role": "admin"
+    }
+  ],
+  "product": [
+    {
+      "id": 1,
+      "name": "Producto A",
+      "price": 100
+    }
+  ]
+}
