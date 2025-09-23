@@ -19,7 +19,7 @@ const SP_list = () => {
         <ul>
             {selling_points.map((sp) => (
                 <li className = "sellingpoint-li" key ={sp.id}>
-                    <div className = "sp-li-title">Nombre: {sp.name}</div>
+                    <div className = "sp-li-title">Nombre: {sp.name} - #{sp.id}</div>
                     <p>{sp.static_point ? 'Estático' : 'No estático'}</p>
                     <p>Tipo de producto: {sp.product_type}</p>
                 </li>

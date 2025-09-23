@@ -12,6 +12,7 @@ import {
 import type { sellingPoint } from './types/sellingPoint.ts';
 import SellingPointComp from './components/SellingPoint.tsx';
 import SP_list from "./components/sp_list.tsx";
+import FormSP from "./components/FormSP.tsx";
 
 const SellingPointList = () => {
   const navigate = useNavigate();
@@ -28,6 +29,34 @@ const SellingPointList = () => {
       </div>
       <div>
         <SP_list/>
+      </div>
+    </div>
+  )
+}
+
+const SellingPointSearch = () => {
+  const navigate = useNavigate();
+  const [id, setId] = useState<number>(0);
+  return (
+    <div>
+      <div>
+        <input
+          type="text"
+          placeholder="id del selling point"
+          onChange={(e) => setId(Number(e.target.value))}
+        />
+        <button onClick={() => navigate(`/sellingPoint/${id}`)}>Ir al SellingPoint</button>
+      </div>
+    </div>
+  )
+}
+
+const FormSellingPoint = () => {
+  const navigate = useNavigate();
+  return (
+    <div>
+      <div>
+        <FormSP/>
       </div>
     </div>
   )
@@ -67,11 +96,11 @@ const App = () => {
       </div>
       <div className = "NavBar">
         <br></br>
-        <Link to = "/sellingPointList">Busqueda SellingPoints</Link>
+        <Link to = "/sellingPointSearch">Busqueda SellingPoints</Link>
         |
         <Link to = "/sellingPointList">Listado SellingPoints</Link>
         |
-        <Link to = "/sellingPointList">Notas</Link>
+        <Link to = "/formSellingPoint">Formulario Nuevo SellingPoint</Link>
         |
         <Link to = "/sellingPointList">Notas</Link>
         |
@@ -81,7 +110,9 @@ const App = () => {
 
       <Routes>
         <Route path="/sellingPointList" element={<SellingPointList />} />
+        <Route path="/sellingPointSearch" element={<SellingPointSearch />} />
         <Route path="/sellingPoint/:id" element={<DetalleSellingPoint />} />
+        <Route path="/formSellingPoint" element={<FormSellingPoint />} />
       </Routes>
     </Router>
   )
