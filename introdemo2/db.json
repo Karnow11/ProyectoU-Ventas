@@ -1,0 +1,32 @@
+{ 
+    "ceilling_points":[
+        {
+    "id": "1",
+    "name": "Alberto",
+    "static_dynamic": "dynamic",
+    "product_type": "artesanias",
+    "description": "descripcion 1"
+},
+{
+    "id": "2",
+    "name": "Felipe",
+    "static_dynamic": "static",
+    "product_type": "llaveros",
+    "description": "descripcion 2"
+},
+{
+    "id": "3",
+    "name": "Roberto",
+    "static_dynamic": "dynamic",
+    "product_type": "pasteles",
+    "description": "descripcion 3"
+},
+{
+    "id": "4",
+    "name": "Pedro",
+    "static_dynamic": "static",
+    "product_type": "ropa",
+    "description": "descripcion 4"
+}
+]
+}
