@@ -40,3 +40,69 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Estilos para SellingPoints */
+.static-comp {
+  background: #e0f7fa;
+  border: 2px solid #00838f;
+  border-radius: 12px;
+  margin: 1.5em auto;
+  padding: 1.5em 2em;
+  max-width: 600px;
+  box-shadow: 0 2px 12px rgba(0, 131, 143, 0.08);
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.static-comp:hover {
+  border-color: #00acc1;
+  box-shadow: 0 6px 24px rgba(0, 172, 193, 0.18);
+}
+
+.nonstatic-comp {
+  background: #fff3e0;
+  border: 2px solid #f57c00;
+  border-radius: 12px;
+  margin: 1.5em auto;
+  padding: 1.5em 2em;
+  max-width: 600px;
+  box-shadow: 0 2px 12px rgba(245, 124, 0, 0.08);
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.nonstatic-comp:hover {
+  border-color: #ffb300;
+  box-shadow: 0 6px 24px rgba(255, 179, 0, 0.18);
+}
+
+.point-title {
+  font-family: 'Segoe UI', 'Arial Black', 'Arial', sans-serif;
+  font-weight: 900;
+  color: #00838f;
+  margin-bottom: 0.5em;
+  font-size: 2em;
+  letter-spacing: 1px;
+  text-shadow: 1px 2px 8px #b2ebf2, 0 2px 2px #00838f44;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+.nonstatic-comp .point-title {
+  color: #f57c00;
+  text-shadow: 1px 2px 8px #ffe0b2, 0 2px 2px #f57c0044;
+}
+
+.sellingPoint-content {
+  color: #333;
+  font-size: 1.05em;
+  margin-top: 0.5em;
+  white-space: pre-line; /* Permite mostrar los saltos de línea (\n) */
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .static-comp,
+  .nonstatic-comp {
+    max-width: 95vw;
+    padding: 1em;
+  }
+}

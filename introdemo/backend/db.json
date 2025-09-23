@@ -4,28 +4,28 @@
       "id": 1,
       "static_point": true,
       "name": "Point 1",
-      "description": "This is point 1",
+      "description": "Punto de venta 1 se dedica a la venta de comida al por menor, hecha en casa y con alto valor nutritivo. Contamos con un amplio menu y preciso baratos. \nMenu: \nHamburguesa vegana: $2500 \nHamburguesa clasica: $2000 \nEnsalada cesar: $1500 \nSopa del dia: $1200 \nBebida natural: $800",
       "product_type": "comida"
     },
     {
       "id": 2,
       "static_point": false,
       "name": "Point 2",
-      "description": "This is point 2",
+      "description": "Punto de venta 2",
       "product_type": "utiles"
     },
     {
       "id": 3,
       "static_point": true,
       "name": "Point 3",
-      "description": "This is point 3",
+      "description": "Punto de venta 3",
       "product_type": "artesanias"
     },
     {
       "id": 4,
       "static_point": false,
       "name": "Point 4",
-      "description": "This is point 4",
+      "description": "Punto de venta 4",
       "product_type": "libros"
     }
   ],

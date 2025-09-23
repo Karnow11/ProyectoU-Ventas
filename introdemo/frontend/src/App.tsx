@@ -1,34 +1,83 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
+import "./App.css";
+import axios from "axios"
+import {
+  Link,
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
+import type { sellingPoint } from './types/sellingPoint.ts';
+import SellingPointComp from './components/SellingPoint.tsx';
 
-function App() {
+const SellingPointList = () => {
+  const navigate = useNavigate();
+  const [id, setId] = useState<number>(0);
+  return (
+    <div>
+      <input
+        type="text"
+        placeholder="id del selling point"
+        onChange={(e) => setId(Number(e.target.value))}
+      />
+      <button onClick={() => navigate(`/sellingPoint/${id}`)}>Ir al SellingPoint</button>
+    </div>
+  )
+}
+
+const DetalleSellingPoint = () => {
+  const {id} = useParams();
+  const [sellingPointData, setSellingPointBase] = useState<sellingPoint>({
+    id: 0,
+    static_point: false,
+    name: "base",
+    description: "base",
+    product_type: "base",
+  });
+
+  useEffect( () => {
+    console.log("usamos el useEffect")
+    axios.get(`http://localhost:3001/selling_point/${id}`).then((response) => {
+      console.log("usamos el axios get threads")
+      setSellingPointBase(response.data);
+    });
+  }, []);
+  return (
+    <div>
+      <SellingPointComp sellingPoint = {sellingPointData}/>
+    </div>
+  )
+}
+
+const App = () => {
   const [count, setCount] = useState(0)
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <Router >
+      <div className = "Titulo">
+        <h1>U-Ventas</h1>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div className = "NavBar">
+        <br></br>
+        <Link to = "/sellingPointList">Notas</Link>
+        |
+        <Link to = "/sellingPointList">Notas</Link>
+        |
+        <Link to = "/sellingPointList">Notas</Link>
+        |
+        <Link to = "/sellingPointList">Notas</Link>
+        |
+        <Link to = "/sellingPointList">Notas</Link>
+
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+
+      <Routes>
+        <Route path="/sellingPointList" element={<SellingPointList />} />
+        <Route path="/sellingPoint/:id" element={<DetalleSellingPoint />} />
+      </Routes>
+    </Router>
   )
 }
 
