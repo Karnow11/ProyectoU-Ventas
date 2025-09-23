@@ -11,18 +11,24 @@ import {
 } from "react-router-dom";
 import type { sellingPoint } from './types/sellingPoint.ts';
 import SellingPointComp from './components/SellingPoint.tsx';
+import SP_list from "./components/sp_list.tsx";
 
 const SellingPointList = () => {
   const navigate = useNavigate();
   const [id, setId] = useState<number>(0);
   return (
     <div>
-      <input
-        type="text"
-        placeholder="id del selling point"
-        onChange={(e) => setId(Number(e.target.value))}
-      />
-      <button onClick={() => navigate(`/sellingPoint/${id}`)}>Ir al SellingPoint</button>
+      <div>
+        <input
+          type="text"
+          placeholder="id del selling point"
+          onChange={(e) => setId(Number(e.target.value))}
+        />
+        <button onClick={() => navigate(`/sellingPoint/${id}`)}>Ir al SellingPoint</button>
+      </div>
+      <div>
+        <SP_list/>
+      </div>
     </div>
   )
 }
@@ -61,9 +67,9 @@ const App = () => {
       </div>
       <div className = "NavBar">
         <br></br>
-        <Link to = "/sellingPointList">Notas</Link>
+        <Link to = "/sellingPointList">Busqueda SellingPoints</Link>
         |
-        <Link to = "/sellingPointList">Notas</Link>
+        <Link to = "/sellingPointList">Listado SellingPoints</Link>
         |
         <Link to = "/sellingPointList">Notas</Link>
         |
