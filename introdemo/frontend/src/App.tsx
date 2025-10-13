@@ -14,6 +14,10 @@ import SellingPointComp from './components/SellingPoint.tsx';
 import SP_list from "./components/sp_list.tsx";
 import FormSP from "./components/FormSP.tsx";
 
+import loginService from "./services/login.ts"
+import type {User} from './types/user.ts'
+import Toggle from "./utils/Toggle.tsx";
+
 const SellingPointList = () => {
   const navigate = useNavigate();
   const [id, setId] = useState<number>(0);
@@ -88,12 +92,62 @@ const DetalleSellingPoint = () => {
 
 const App = () => {
   const [count, setCount] = useState(0)
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [user, setUser] = useState<User | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const user = await loginService.login({
+        username,
+        password,
+      });
+      setUser(user);
+      setUsername("");
+      setPassword("");
+    } catch (exception) {
+      setErrorMessage("Wrong credentials");
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+    }
+  };
+
+  const handleLogout = () => {
+    loginService.logout();
+    setUser(null);
+  };
 
   return (
     <Router >
       <div className = "Titulo">
         <h1>U-Ventas</h1>
       </div>
+
+      <div>
+        {user ? <>{user.name}</> : (
+          <Toggle text="Login">
+            <form onSubmit={handleLogin}>
+              <div>
+                username
+                <input type="text" value={username} name="Username"
+                  onChange={({ target }) => setUsername(target.value)}
+                />
+              </div>
+              <div>
+                password
+                <input type="password" value={password} name="Password"
+                  onChange={({ target }) => setPassword(target.value)}
+                />
+              </div>
+              <p style={{ color: "red" }}>{errorMessage}</p>
+              <button type="submit">login</button>
+            </form>
+          </Toggle>)}
+      </div>
+
       <div className = "NavBar">
         <br></br>
         <Link to = "/sellingPointSearch">Busqueda SellingPoints</Link>
