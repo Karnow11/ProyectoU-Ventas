@@ -97,6 +97,14 @@ const App = () => {
   const [user, setUser] = useState<User | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  useEffect(() => {
+    const init = async () => {
+      const user = await loginService.restoreLogin();
+      setUser(user);
+    };
+    init();
+  }, []);
+
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
