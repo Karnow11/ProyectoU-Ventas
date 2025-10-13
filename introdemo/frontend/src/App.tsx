@@ -91,7 +91,6 @@ const DetalleSellingPoint = () => {
 }
 
 const App = () => {
-  const [count, setCount] = useState(0)
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState<User | null>(null);
@@ -135,7 +134,11 @@ const App = () => {
       </div>
 
       <div>
-        {user ? <>{user.name}</> : (
+        {user ? (
+          <div>
+            {user.name}
+            <button onClick={handleLogout}>Logout</button>
+          </div>) : (
           <Toggle text="Login">
             <form onSubmit={handleLogin}>
               <div>
