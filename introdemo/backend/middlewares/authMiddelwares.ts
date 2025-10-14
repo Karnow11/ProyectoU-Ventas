@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import config from "../config"
 
 export const withUser = async (
   req: Request,

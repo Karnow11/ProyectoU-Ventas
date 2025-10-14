@@ -1,14 +1,13 @@
+import { Request, Response, NextFunction } from "express"
+import bcrypt from 'bcrypt';
+import  User  from "../Model/User";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
-import express from "express";
-import User from "../models/users";
-import config from "../utils/config";
-import { withUser } from "../utils/middleware";
+import config from "../config";
 
-router.post("/login", async (request, response) => {
-  const { username, password } = request.body;
+export const login =  async (request: Request, response: Response, next: NextFunction) => {
+  const { name, password } = request.body;
 
-  const user = await User.findOne({ username });
+  const user = await User.findOne({ name });
   if (user) {
     const passwordCorrect = await bcrypt.compare(password, user.passwordHash);
 
@@ -18,7 +17,7 @@ router.post("/login", async (request, response) => {
       });
     } else {
       const userForToken = {
-        username: user.username,
+        username: user.name,
         csrf: crypto.randomUUID(),
         id: user._id,
       };
@@ -31,25 +30,25 @@ router.post("/login", async (request, response) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
       });
-      response.status(200).send({ username: user.username, name: user.name });
+      response.status(200).send({name: user.name });
     }
   } else {
     response.status(401).json({
       error: "invalid username or password",
     });
   }
-});
+  next();
+}
 
-router.get("/me", withUser, async (request, response, next) => {
+export const getCurrentUser = async (request: Request, response: Response, next: NextFunction) => {
   const body = request.body;
   const user = await User.findById(request.userId);
-  response.status(200).json(user);
-});
+  response.status(200).json(user)
+};
 
-
-router.post("/logout", (request, response) => {
+export const logout = (request: Request, response: Response) => {
   response.clearCookie("token");
   response.status(200).send({
     message: "Logged out successfully"
   });
-});
+};
