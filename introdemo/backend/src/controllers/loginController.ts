@@ -1,10 +1,13 @@
-import { Request, Response, NextFunction } from "express"
 import bcrypt from 'bcrypt';
-import  User  from "../Model/User";
 import jwt from "jsonwebtoken";
-import config from "../config";
+import express from "express";
+import User from "../models/User";
+import config from "../utils/config";
+import withUser from "../middlewares/authMiddelwares";
 
-export const login =  async (request: Request, response: Response, next: NextFunction) => {
+const router = express.Router();
+
+router.post("/", async (request, response) => {
   const { name, password } = request.body;
 
   const user = await User.findOne({ name });
@@ -37,18 +40,19 @@ export const login =  async (request: Request, response: Response, next: NextFun
       error: "invalid username or password",
     });
   }
-  next();
-}
+});
 
-export const getCurrentUser = async (request: Request, response: Response, next: NextFunction) => {
+router.get("/me", withUser, async (request, response, next) => {
   const body = request.body;
   const user = await User.findById(request.userId);
   response.status(200).json(user)
-};
+});
 
-export const logout = (request: Request, response: Response) => {
+router.post("/logout", (request, response) =>  {
   response.clearCookie("token");
   response.status(200).send({
     message: "Logged out successfully"
   });
-};
+});
+
+export default router;

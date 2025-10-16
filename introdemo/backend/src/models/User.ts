@@ -1,13 +1,16 @@
 import mongoose from "mongoose";
 
-interface IUser {
-  id: string;
-  name: string;
+export interface IUser extends Document {
+  username: string;
+  email: string;
   passwordHash: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const userSchema = new mongoose.Schema<IUser>({
-  name: { type: String, required: true, unique: [true, "este nombre de usuario ya está ocupado"] },
+  username: { type: String, required: true, unique: [true, "este nombre de usuario ya está ocupado"] },
+  email: { type: String, required: true, unique: true },
   passwordHash: { type: String, required: true}
 });
 

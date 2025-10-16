@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
-import logger from "./logger";
-import config from "./config";
+import logger from "./middlewares/logger";
+import config from "./utils/config";
 import mongoose from "mongoose";
 import { unknownEndpoint, errorHandler } from "./middlewares/handlerError";
 import { withUser } from "./middlewares/authMiddelwares"

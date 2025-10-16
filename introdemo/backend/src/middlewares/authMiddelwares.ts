@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import config from "../config"
+import config from "../utils/config"
 
 export const withUser = async (
   req: Request,
@@ -30,3 +30,5 @@ export const withUser = async (
     res.status(401).json({ error: "invalid token" });
   }
 };
+
+export default withUser;

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import logger from "../logger";
+import logger from "../middlewares/logger";
 import jwt from "jsonwebtoken";
-import config from "../config";
+import config from "../utils/config";
 
 export const unknownEndpoint = (
   request: Request,
