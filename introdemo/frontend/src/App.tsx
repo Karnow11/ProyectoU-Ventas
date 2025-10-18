@@ -98,8 +98,8 @@ const App = () => {
 
   useEffect(() => {
     const init = async () => {
-      const user = await loginService.restoreLogin();
-      setUser(user);
+      const new_user = await loginService.restoreLogin();
+      setUser(new_user);
     };
     init();
   }, []);
