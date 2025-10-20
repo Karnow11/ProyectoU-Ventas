@@ -78,7 +78,7 @@ const DetalleSellingPoint = () => {
 
   useEffect( () => {
     console.log("usamos el useEffect")
-    axios.get(`http://localhost:3001/selling_point/${id}`).then((response) => {
+    axios.get(`http://localhost:3001/api/selling_points/${id}`).then((response) => {
       console.log("usamos el axios get threads")
       setSellingPointBase(response.data);
     });

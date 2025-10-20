@@ -20,7 +20,7 @@ const FormSP = () => {
       description: description
     }
 
-    axios.post("http://localhost:3001/selling_point", sellingObject).then((request) => { navigate("/sellingPointList")})
+    axios.post("http://localhost:3001/api/selling_points", sellingObject).then((request) => { navigate("/sellingPointList")})
     //console.log("nombre form: " + name)
     
     //console.log("punto del form: " + static_dynamic)

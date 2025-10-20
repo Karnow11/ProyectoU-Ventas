@@ -10,6 +10,16 @@ import withUser from "./middlewares/authMiddelwares";
 import User from "./models/User";
 import cookieParser from "cookie-parser";
 
+import mongoose from "mongoose"; // Add this
+import config from "./utils/config"; // Add this
+import spRouter from "./controllers/selling_points"; // Add this
+
+mongoose.set("strictQuery", false);
+if (config.MONGODB_URI) {
+  mongoose.connect(config.MONGODB_URI, { dbName: config.MONGODB_DBNAME }).catch((error) => {
+    console.error("error connecting to MongoDB:", error.message);
+  });
+}
 
 declare global {
   namespace Express {
@@ -21,7 +31,11 @@ declare global {
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+}));
+
 app.use(express.json());
 app.use(cookieParser());
 

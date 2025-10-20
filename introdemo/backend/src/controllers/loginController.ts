@@ -8,9 +8,9 @@ import withUser from "../middlewares/authMiddelwares";
 const router = express.Router();
 
 router.post("/", async (request, response) => {
-  const { name, password } = request.body;
-
-  const user = await User.findOne({ name });
+  const { username, password } = request.body;
+  console.log(username)
+  const user = await User.findOne({ username });
   if (user) {
     const passwordCorrect = await bcrypt.compare(password, user.passwordHash);
 
@@ -20,7 +20,7 @@ router.post("/", async (request, response) => {
       });
     } else {
       const userForToken = {
-        username: user.name,
+        username: user.username,
         csrf: crypto.randomUUID(),
         id: user._id,
       };
@@ -33,7 +33,7 @@ router.post("/", async (request, response) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
       });
-      response.status(200).send({name: user.name });
+      response.status(200).send({name: user.username });
     }
   } else {
     response.status(401).json({
@@ -45,7 +45,7 @@ router.post("/", async (request, response) => {
 router.get("/me", withUser, async (request, response, next) => {
   const body = request.body;
   const user = await User.findById(request.userId);
-  response.status(200).json(user)
+  response.status(200).json(user ? { name: user.username } : null);
 });
 
 router.post("/logout", (request, response) =>  {

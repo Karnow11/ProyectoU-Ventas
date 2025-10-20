@@ -6,7 +6,7 @@ const SP_list = () => {
     let [selling_points, setSellingPoints] = useState<sellingPoint[]>([])
 
     const getAllThreads = () => {
-        axios.get("http://localhost:3001/selling_point").then((response) => {
+        axios.get("http://localhost:3001/api/selling_points").then((response) => {
             setSellingPoints(response.data)
         })
     }
