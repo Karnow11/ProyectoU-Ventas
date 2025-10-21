@@ -25,4 +25,4 @@ dist-ssr
 introdemo\backend\dist
 introdemo\frontend\dist
 introdemo\backend\out\src
-introdemo\backend\.env
+.env*
