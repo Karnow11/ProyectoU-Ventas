@@ -1,8 +1,15 @@
 import axios from "axios";
 import axiosSecure from "../utils/axiosSecure";
+import type { User } from "../types/user";
 
 type Credentials = {
     username: string;
+    password: string;
+};
+
+type Create = {
+    username: string;
+    email: string,
     password: string;
 };
 
@@ -19,6 +26,10 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+const create = async (user: Create) => {
+    api.post("/api/users", user)
+}
 
 const login = async (credentials: Credentials) => {
     const response = await api.post("/api/login", credentials);
@@ -44,4 +55,4 @@ const logout = async () => {
     localStorage.removeItem("csrfToken");
 };
 
-export default { login, restoreLogin, logout };
+export default { login, restoreLogin, logout, create };
