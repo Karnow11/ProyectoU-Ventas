@@ -74,11 +74,11 @@ app.get("/api/selling_points/:id", (request, response, next) => {
     .catch((error) => next(error));
 });
 
-app.post("/api/selling_points", withUser, async (request, response, next) => {
+app.post("/api/selling_points", async (request, response, next) => {
   const body = request.body;
-  const token = request.cookies?.token;
+  //const token = request.cookies?.token;
 
-  console.log("User ID:", request.userId);
+  //console.log("User ID:", request.userId);
 
   const post = new SPModel({
     name: body.name,
