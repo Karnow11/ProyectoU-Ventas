@@ -1,11 +1,18 @@
 # ProyectoU-Ventas
-Para iniciar el proyecto debes iniciar la base de datos en una terminal
-dentro de la carpeta /backend con el comando:
-npx json-server --port 3001 db.json
+Para iniciar el proyecto, en primera instancia se deben instalar las dependencias del mismo con:
+- ´npm install´ en la carpeta /backend
+- ´npm install´ en la carpeta /frontend 
 
-Luego se inicia el proyecto en la carpeta principal en otra terminal en 
-la carpeta introdemo con :
-npm install
-npm run dev
+Luego, se debe compilar el backend y el frontend en una terminal dentro de la carpeta /backend con el comando:
+
+´npm run build:ui´ 
+
+Una vez completado, se compila el proyecto en sí con:
+
+´npm run build´ 
+
+Y finalmente, es posible ejecutar la plataforma con:
+
+´npm run start´
 
 Eso es todo c^:
