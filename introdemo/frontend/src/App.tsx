@@ -56,7 +56,6 @@ const SellingPointSearch = () => {
 }
 
 const FormSellingPoint = () => {
-  const navigate = useNavigate();
   return (
     <div>
       <div>

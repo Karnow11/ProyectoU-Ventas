@@ -1,5 +1,4 @@
 import axios from "axios";
-import axiosSecure from "../utils/axiosSecure";
 
 type Credentials = {
     username: string;

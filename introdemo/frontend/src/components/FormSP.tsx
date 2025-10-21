@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from "axios";
 import type { sellingPoint } from "../types/sellingPoint.tsx";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const FormSP = () => {
   const [name, setName] = useState<string>("")
@@ -20,7 +20,7 @@ const FormSP = () => {
       description: description
     }
 
-    axios.post("http://localhost:3001/api/selling_points", sellingObject).then((request) => { navigate("/sellingPointList")})
+    axios.post("http://localhost:3001/api/selling_points", sellingObject).then(() => { navigate("/sellingPointList")})
     //console.log("nombre form: " + name)
     
     //console.log("punto del form: " + static_dynamic)
@@ -34,11 +34,11 @@ const FormSP = () => {
     setName(event.target.value);
     } 
 
-  const handleStaticChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleStaticChange = () => {
     setStatic_dynamyc(true);
     }   
   
-  const handledynamicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handledynamicChange = () => {
     setStatic_dynamyc(false);
   }
   
