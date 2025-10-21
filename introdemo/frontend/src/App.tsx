@@ -20,14 +20,14 @@ import Toggle from "./utils/Toggle.tsx";
 
 const SellingPointList = () => {
   const navigate = useNavigate();
-  const [id, setId] = useState<number>(0);
+  const [id, setId] = useState<string>("");
   return (
     <div>
       <div>
         <input
           type="text"
           placeholder="id del selling point"
-          onChange={(e) => setId(Number(e.target.value))}
+          onChange={(e) => setId(String(e.target.value))}
         />
         <button onClick={() => navigate(`/sellingPoint/${id}`)}>Ir al SellingPoint</button>
       </div>
@@ -40,14 +40,14 @@ const SellingPointList = () => {
 
 const SellingPointSearch = () => {
   const navigate = useNavigate();
-  const [id, setId] = useState<number>(0);
+  const [id, setId] = useState<string>("");
   return (
     <div>
       <div>
         <input
           type="text"
           placeholder="id del selling point"
-          onChange={(e) => setId(Number(e.target.value))}
+          onChange={(e) => setId(String(e.target.value))}
         />
         <button onClick={() => navigate(`/sellingPoint/${id}`)}>Ir al SellingPoint</button>
       </div>
@@ -69,7 +69,7 @@ const FormSellingPoint = () => {
 const DetalleSellingPoint = () => {
   const {id} = useParams();
   const [sellingPointData, setSellingPointBase] = useState<sellingPoint>({
-    id: 0,
+    id: "",
     static_point: false,
     name: "base",
     description: "base",
@@ -77,10 +77,11 @@ const DetalleSellingPoint = () => {
   });
 
   useEffect( () => {
-    console.log("usamos el useEffect")
+    console.log(`usamos el useEffect con id :${id}`)
     axios.get(`http://localhost:3001/api/selling_points/${id}`).then((response) => {
       console.log("usamos el axios get threads")
-      setSellingPointBase(response.data);
+      console.log(response.data);
+      setSellingPointBase(response.data.selling_point);
     });
   }, []);
   return (

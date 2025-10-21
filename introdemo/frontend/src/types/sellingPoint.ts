@@ -1,5 +1,5 @@
 export type sellingPoint = {
-    id: number;
+    id: string;
     static_point: boolean;
     name: string;
     description: string;
