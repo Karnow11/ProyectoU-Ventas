@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+introdemo\backend\dist
+introdemo\frontend\dist
+introdemo\backend\out\src
+.env*

@@ -14,16 +14,20 @@ import SellingPointComp from './components/SellingPoint.tsx';
 import SP_list from "./components/sp_list.tsx";
 import FormSP from "./components/FormSP.tsx";
 
+import loginService from "./services/login.ts"
+import type {User} from './types/user.ts'
+import Toggle from "./utils/Toggle.tsx";
+
 const SellingPointList = () => {
   const navigate = useNavigate();
-  const [id, setId] = useState<number>(0);
+  const [id, setId] = useState<string>("");
   return (
     <div>
       <div>
         <input
           type="text"
           placeholder="id del selling point"
-          onChange={(e) => setId(Number(e.target.value))}
+          onChange={(e) => setId(String(e.target.value))}
         />
         <button onClick={() => navigate(`/sellingPoint/${id}`)}>Ir al SellingPoint</button>
       </div>
@@ -36,14 +40,14 @@ const SellingPointList = () => {
 
 const SellingPointSearch = () => {
   const navigate = useNavigate();
-  const [id, setId] = useState<number>(0);
+  const [id, setId] = useState<string>("");
   return (
     <div>
       <div>
         <input
           type="text"
           placeholder="id del selling point"
-          onChange={(e) => setId(Number(e.target.value))}
+          onChange={(e) => setId(String(e.target.value))}
         />
         <button onClick={() => navigate(`/sellingPoint/${id}`)}>Ir al SellingPoint</button>
       </div>
@@ -52,7 +56,6 @@ const SellingPointSearch = () => {
 }
 
 const FormSellingPoint = () => {
-  const navigate = useNavigate();
   return (
     <div>
       <div>
@@ -65,7 +68,7 @@ const FormSellingPoint = () => {
 const DetalleSellingPoint = () => {
   const {id} = useParams();
   const [sellingPointData, setSellingPointBase] = useState<sellingPoint>({
-    id: 0,
+    id: "",
     static_point: false,
     name: "base",
     description: "base",
@@ -73,10 +76,11 @@ const DetalleSellingPoint = () => {
   });
 
   useEffect( () => {
-    console.log("usamos el useEffect")
-    axios.get(`http://localhost:3001/selling_point/${id}`).then((response) => {
+    console.log(`usamos el useEffect con id :${id}`)
+    axios.get(`http://localhost:3001/api/selling_points/${id}`).then((response) => {
       console.log("usamos el axios get threads")
-      setSellingPointBase(response.data);
+      console.log(response.data);
+      setSellingPointBase(response.data.selling_point);
     });
   }, []);
   return (
@@ -87,13 +91,74 @@ const DetalleSellingPoint = () => {
 }
 
 const App = () => {
-  const [count, setCount] = useState(0)
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [user, setUser] = useState<User | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const init = async () => {
+      const new_user = await loginService.restoreLogin();
+      setUser(new_user);
+    };
+    init();
+  }, []);
+
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const user = await loginService.login({
+        username,
+        password,
+      });
+      setUser(user);
+      setUsername("");
+      setPassword("");
+    } catch (exception) {
+      setErrorMessage("Wrong credentials");
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+    }
+  };
+
+  const handleLogout = () => {
+    loginService.logout();
+    setUser(null);
+  };
 
   return (
     <Router >
       <div className = "Titulo">
         <h1>U-Ventas</h1>
       </div>
+
+      <div>
+        {user ? (
+          <div>
+            {user.name}
+            <button onClick={handleLogout}>Logout</button>
+          </div>) : (
+          <Toggle text="Login">
+            <form onSubmit={handleLogin}>
+              <div>
+                username
+                <input type="text" value={username} name="Username"
+                  onChange={({ target }) => setUsername(target.value)}
+                />
+              </div>
+              <div>
+                password
+                <input type="password" value={password} name="Password"
+                  onChange={({ target }) => setPassword(target.value)}
+                />
+              </div>
+              <p style={{ color: "red" }}>{errorMessage}</p>
+              <button type="submit">login</button>
+            </form>
+          </Toggle>)}
+      </div>
+
       <div className = "NavBar">
         <br></br>
         <Link to = "/sellingPointSearch">Busqueda SellingPoints</Link>
