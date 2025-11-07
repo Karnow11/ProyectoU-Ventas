@@ -7,8 +7,9 @@ import User from "../models/User";
 const router = express.Router();
 
 export const createUser = async (req: Request, res: Response, next: NextFunction) => {
+  const {username, email, password} = req.body
   try {
-    res.status(501).json({ error: 'Not implemented' });
+    res.status(501).json({ username, email, password });
   } catch (error) {
     next(error);
   }

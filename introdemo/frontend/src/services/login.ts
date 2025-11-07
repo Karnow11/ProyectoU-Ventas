@@ -5,6 +5,12 @@ type Credentials = {
     password: string;
 };
 
+type Create = {
+    username: string;
+    email: string,
+    password: string;
+};
+
 // crea un cliente con baseURL del backend y cookies habilitadas
 const api = axios.create({
   baseURL: "http://localhost:3001",
@@ -18,6 +24,10 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+const create = async (user: Create) => {
+    api.post("/api/users", user)
+}
 
 const login = async (credentials: Credentials) => {
     const response = await api.post("/api/login", credentials);
@@ -43,4 +53,4 @@ const logout = async () => {
     localStorage.removeItem("csrfToken");
 };
 
-export default { login, restoreLogin, logout };
+export default { login, restoreLogin, logout, create };
