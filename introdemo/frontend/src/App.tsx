@@ -97,7 +97,8 @@ const App = () => {
   const [password_create, setPasswordCreate] = useState("");
   const [mail_create, setMailCreate] = useState("")
   const [user, setUser] = useState<User | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessageLogin, setErrorMessageLogin] = useState<string | null>(null);
+  const [errorMessageCreate, setErrorMessageCreate] = useState<string | null>(null);
 
   useEffect(() => {
     const init = async () => {
@@ -117,10 +118,10 @@ const App = () => {
       setUser(user);
       setUsernameLog("");
       setPasswordLog("");
-    } catch (exception) {
-      setErrorMessage("Wrong credentials");
+    } catch (exception: any) {
+      setErrorMessageLogin(exception.response?.data?.error || "");
       setTimeout(() => {
-        setErrorMessage(null);
+        setErrorMessageLogin(null);
       }, 5000);
     }
   };
@@ -142,10 +143,10 @@ const App = () => {
       setUsernameCreate("")
       setMailCreate("")
       setPasswordCreate("")
-    } catch (exception) {
-      setErrorMessage("F");
+    } catch (exception: any) {
+      setErrorMessageCreate(exception.response?.data?.error || "");
       setTimeout(() => {
-        setErrorMessage(null);
+        setErrorMessageCreate(null);
       }, 5000);
     }
   }
@@ -177,7 +178,7 @@ const App = () => {
                     onChange={({ target }) => setPasswordLog(target.value)}
                   />
                 </div>
-                <p style={{ color: "red" }}>{errorMessage}</p>
+                <p style={{ color: "red" }}>{errorMessageLogin}</p>
                 <button type="submit">login</button>
               </form>
             </Toggle>
@@ -201,7 +202,7 @@ const App = () => {
                     onChange={({ target }) => setPasswordCreate(target.value)}
                   />
                 </div>
-                <p style={{ color: "red" }}>{errorMessage}</p>
+                <p style={{ color: "red" }}>{errorMessageCreate}</p>
                 <button type="submit">Create</button>
               </form>
             </Toggle>
