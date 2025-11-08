@@ -6,7 +6,7 @@ import path from "path";
 import SPModel from "./models/selling_points";
 import userRouter from "./controllers/userController";
 import loginRouter from "./controllers/loginController";
-import withUser from "./middlewares/authMiddelwares";
+//import withUser from "./middlewares/authMiddelwares";
 import User from "./models/User";
 import cookieParser from "cookie-parser";
 
@@ -74,11 +74,11 @@ app.get("/api/selling_points/:id", (request, response, next) => {
     .catch((error) => next(error));
 });
 
-app.post("/api/selling_points", withUser, async (request, response, next) => {
+app.post("/api/selling_points", async (request, response, next) => {
   const body = request.body;
-  const token = request.cookies?.token;
+  //const token = request.cookies?.token;
 
-  console.log("User ID:", request.userId);
+  //console.log("User ID:", request.userId);
 
   const post = new SPModel({
     name: body.name,
@@ -94,7 +94,7 @@ app.post("/api/selling_points", withUser, async (request, response, next) => {
     .catch((error) => next(error));
 });
 
-app.post("/api/selling_point/:id", withUser, async (request, response, next) => {
+app.post("/api/selling_point/:id", async (request, response, next) => {
 
   const body = request.body;
   const SPId = request.params.id;

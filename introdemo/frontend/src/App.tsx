@@ -56,7 +56,6 @@ const SellingPointSearch = () => {
 }
 
 const FormSellingPoint = () => {
-  //const navigate = useNavigate();
   return (
     <div>
       <div>
@@ -92,10 +91,14 @@ const DetalleSellingPoint = () => {
 }
 
 const App = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username_log, setUsernameLog] = useState("");
+  const [password_log, setPasswordLog] = useState("");
+  const [username_create, setUsernameCreate] = useState("");
+  const [password_create, setPasswordCreate] = useState("");
+  const [mail_create, setMailCreate] = useState("")
   const [user, setUser] = useState<User | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessageLogin, setErrorMessageLogin] = useState<string | null>(null);
+  const [errorMessageCreate, setErrorMessageCreate] = useState<string | null>(null);
 
   useEffect(() => {
     const init = async () => {
@@ -109,16 +112,16 @@ const App = () => {
     event.preventDefault();
     try {
       const user = await loginService.login({
-        username,
-        password,
+        username: username_log,
+        password: password_log,
       });
       setUser(user);
-      setUsername("");
-      setPassword("");
-    } catch (exception) {
-      setErrorMessage("Wrong credentials");
+      setUsernameLog("");
+      setPasswordLog("");
+    } catch (exception: any) {
+      setErrorMessageLogin(exception.response?.data?.error || "");
       setTimeout(() => {
-        setErrorMessage(null);
+        setErrorMessageLogin(null);
       }, 5000);
     }
   };
@@ -127,6 +130,26 @@ const App = () => {
     loginService.logout();
     setUser(null);
   };
+
+  const createUser = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const user = {
+        username: username_create,
+        email: mail_create,
+        password: password_create
+      };
+      await loginService.create(user)
+      setUsernameCreate("")
+      setMailCreate("")
+      setPasswordCreate("")
+    } catch (exception: any) {
+      setErrorMessageCreate(exception.response?.data?.error || "");
+      setTimeout(() => {
+        setErrorMessageCreate(null);
+      }, 5000);
+    }
+  }
 
   return (
     <Router >
@@ -140,24 +163,50 @@ const App = () => {
             {user.name}
             <button onClick={handleLogout}>Logout</button>
           </div>) : (
-          <Toggle text="Login">
-            <form onSubmit={handleLogin}>
-              <div>
-                username
-                <input type="text" value={username} name="Username"
-                  onChange={({ target }) => setUsername(target.value)}
-                />
-              </div>
-              <div>
-                password
-                <input type="password" value={password} name="Password"
-                  onChange={({ target }) => setPassword(target.value)}
-                />
-              </div>
-              <p style={{ color: "red" }}>{errorMessage}</p>
-              <button type="submit">login</button>
-            </form>
-          </Toggle>)}
+          <>
+            <Toggle text="Login">
+              <form onSubmit={handleLogin}>
+                <div>
+                  username
+                  <input type="text" value={username_log} name="Username"
+                    onChange={({ target }) => setUsernameLog(target.value)}
+                  />
+                </div>
+                <div>
+                  password
+                  <input type="password" value={password_log} name="Password"
+                    onChange={({ target }) => setPasswordLog(target.value)}
+                  />
+                </div>
+                <p style={{ color: "red" }}>{errorMessageLogin}</p>
+                <button type="submit">login</button>
+              </form>
+            </Toggle>
+            <Toggle text="Create Account">
+              <form onSubmit={createUser}>
+                <div>
+                  username
+                  <input type="text" value={username_create} name="Username"
+                    onChange={({ target }) => setUsernameCreate(target.value)}
+                  />
+                </div>
+                <div>
+                  mail
+                  <input type="text" value={mail_create} name="Mail"
+                    onChange={({ target }) => setMailCreate(target.value)}
+                  />
+                </div>
+                <div>
+                  password
+                  <input type="password" value={password_create} name="Password"
+                    onChange={({ target }) => setPasswordCreate(target.value)}
+                  />
+                </div>
+                <p style={{ color: "red" }}>{errorMessageCreate}</p>
+                <button type="submit">Create</button>
+              </form>
+            </Toggle>
+          </>)}
       </div>
 
       <div className = "NavBar">

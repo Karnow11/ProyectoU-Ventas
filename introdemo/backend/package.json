@@ -2,11 +2,11 @@
   "name": "introdemo-backend",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "build": "tsc",
     "dev": "cross-env NODE_ENV=development tsx src/server.ts",
-    "start": "cross-env NODE_ENV=production node dist/server.js",
+    "start": "cross-env NODE_ENV=production node out/server.js",
     "test": "cross-env NODE_ENV=test tsx --test tests/**/*.test.ts",
     "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend"
   },

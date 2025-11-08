@@ -36,8 +36,8 @@ const FormSP = () => {
 
   const handleStaticChange = () => {
     setStatic_dynamyc(true);
-    }
-
+    }   
+  
   const handledynamicChange = () => {
     setStatic_dynamyc(false);
   }

@@ -7,8 +7,9 @@ import User from "../models/User";
 const router = express.Router();
 
 export const createUser = async (req: Request, res: Response, next: NextFunction) => {
+  const {username, email, password} = req.body
   try {
-    res.status(501).json({ error: 'Not implemented' });
+    res.status(501).json({ username, email, password });
   } catch (error) {
     next(error);
   }
@@ -21,6 +22,16 @@ router.get("/", async (request, response) => {
 
 router.post("/", async (request, response) => {
   const { username, email, password } = request.body;
+
+  if(!username && !email && !password){
+    return response.status(400).json({ error: "Fill all the fields" })
+  }
+
+  const users = await User.find({username})
+  console.log(users)
+  if(users.length != 0){
+    return response.status(400).json({ error: "Username is already taken" });
+  }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
@@ -40,24 +51,5 @@ router.post("/", async (request, response) => {
 
   response.status(201).json(savedUser);
 })
-
-
-
-
-export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    res.status(501).json({ error: 'Not implemented' });
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getUserById = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    res.status(501).json({ error: 'Not implemented' });
-  } catch (error) {
-    next(error);
-  }
-};
 
 export default router;
