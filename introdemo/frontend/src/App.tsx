@@ -18,6 +18,11 @@ import loginService from "./services/login.ts"
 import type {User} from './types/user.ts'
 import Toggle from "./utils/Toggle.tsx";
 
+
+//Nuevos
+import type { Store } from "redux";
+import type { Action } from "./store";
+
 const SellingPointList = () => {
   const navigate = useNavigate();
   const [id, setId] = useState<string>("");
