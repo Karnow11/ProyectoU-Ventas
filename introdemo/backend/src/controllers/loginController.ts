@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post("/", async (request, response) => {
   const { username, password } = request.body;
-  console.log(username)
+
   const user = await User.findOne({ username });
   if (user) {
     const passwordCorrect = await bcrypt.compare(password, user.passwordHash);
@@ -33,7 +33,7 @@ router.post("/", async (request, response) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
       });
-      console.log(response.getHeaders())
+
       response.status(200).send({name: user.username });
     }
   } else {

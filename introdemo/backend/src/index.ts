@@ -34,6 +34,7 @@ const app = express();
 app.use(cors({
   origin: "http://localhost:5173",
   credentials: true,
+  exposedHeaders: ["X-CSRF-Token"],
 }));
 
 app.use(express.json());

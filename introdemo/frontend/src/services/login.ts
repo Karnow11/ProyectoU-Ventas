@@ -19,12 +19,11 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   const csrf = localStorage.getItem("csrfToken");
-  console.log("AAAAAAAAAAAAA")
-  console.log(config.headers)
-  console.log(csrf)
+
   if (csrf) {
     config.headers["X-CSRF-Token"] = csrf;
   }
+
   return config;
 });
 
@@ -37,10 +36,13 @@ const login = async (credentials: Credentials) => {
     const csrfToken = response.headers["x-csrf-token"];
     console.log("BBBBBBBBBBBBBBBBB")
     console.log(response.headers)
+    console.log(csrfToken)
+    console.log(response.data)
     if (csrfToken) {
         localStorage.setItem("csrfToken", csrfToken);
         console.log("Se guarda el token");
     }
+
     return response.data;
 };
 
