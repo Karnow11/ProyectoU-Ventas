@@ -21,7 +21,7 @@ import Toggle from "./utils/Toggle.tsx";
 
 //Nuevos
 import type { Store } from "redux";
-import type { Action } from "./store";
+//import type { Action } from "./store";
 
 const SellingPointList = () => {
   const navigate = useNavigate();

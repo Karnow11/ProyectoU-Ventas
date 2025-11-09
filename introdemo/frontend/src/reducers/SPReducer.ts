@@ -1,13 +1,25 @@
 import type { sellingPoint } from "../types/sellingPoint"
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-export type Action = {
-    type: "NEW_SP"; payload: sellingPoint;
-}
+const initialState: sellingPoint[] = []
+const slice = createSlice({
+    name: "sellingPoints",
+    initialState,
+    reducers: {
+        createSellingPoint (state: sellingPoint[], action: PayloadAction<sellingPoint>){
+            state.push(action.payload);
+        },
+        toggleMovilityOf(state: sellingPoint[], action: PayloadAction<string>) {
+            const id = action.payload;
+            return state.map((sellingPoint) =>
+                sellingPoint.id !== id ? sellingPoint : { ...sellingPoint, static_point: !sellingPoint.static_point }
+            );
+        },
+        setSP(_, action) {
+            return action.payload;
+        },
+    },
+});
 
-const SPReducer = (state: sellingPoint[] = [], action: Action) => {
-    if (action.type === "NEW_SP") {
-        return state.concat(action.payload);
-    }
-    return state;
-};
-export default SPReducer;
+export const { createSellingPoint, toggleMovilityOf, setSP } = slice.actions;
+export default slice.reducer;
