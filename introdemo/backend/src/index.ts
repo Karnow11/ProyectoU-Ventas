@@ -34,6 +34,7 @@ const app = express();
 app.use(cors({
   origin: "http://localhost:5173",
   credentials: true,
+  exposedHeaders: ["X-CSRF-Token"], // <- AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 }));
 
 app.use(express.json());
@@ -54,7 +55,7 @@ app.use(requestLogger);
 
 
 app.get("/api/selling_points", (request, response) => {
-  SPModel.find({ thread: null }).then((sp) => {
+  SPModel.find({}).then((sp) => {
     response.json(sp);
   });
 });
