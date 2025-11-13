@@ -6,6 +6,7 @@ import { unknownEndpoint, errorHandler } from "./middlewares/handlerError";
 import { withUser } from "./middlewares/authMiddelwares"
 import loginRouter  from "./controllers/loginController";
 import cookieParser from "cookie-parser";
+import testingRouter from "./controllers/testing"
 
 export const app = express();
 
@@ -25,3 +26,5 @@ app.use(loginRouter)
 
 app.use(errorHandler)
 app.use(unknownEndpoint)
+
+app.use(testingRouter)
