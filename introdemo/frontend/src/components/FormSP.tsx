@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from "axios";
 import type { sellingPoint } from "../types/sellingPoint.tsx";
 import { useNavigate } from "react-router-dom";
+import sellingPoints from '../services/sellingPoints.ts';
 
 const FormSP = () => {
   const [name, setName] = useState<string>("")
@@ -11,23 +12,9 @@ const FormSP = () => {
   const navigate = useNavigate();
 
 
-  const addSelling = (event: React.FormEvent<HTMLFormElement>) => {
+  const addNew = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const sellingObject: Omit <sellingPoint, "id"> = {
-      name: name,
-      static_point: static_dynamic,
-      product_type: product_type,
-      description: description
-    }
-
-    axios.post("http://localhost:3001/api/selling_points", sellingObject).then(() => { navigate("/sellingPointList")})
-    //console.log("nombre form: " + name)
-    
-    //console.log("punto del form: " + static_dynamic)
-    
-    //console.log("tipo producto form: " + product_type)
-
-    //console.log("descripcion form: " + description)
+    sellingPoints.addSelling({name, static_point: static_dynamic, product_type, description}).then(() => { navigate("/sellingPointList")})
   }
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,7 +42,7 @@ const FormSP = () => {
     <>
     <div className='formSP-container'>
         <h1>Formulario de ventas</h1>
-      <form onSubmit={addSelling} className = "formSP">
+      <form onSubmit={addNew} className = "formSP">
           <label>
         Nombre de tienda <input type="text" value={name} onChange ={handleNameChange}/>
           </label>

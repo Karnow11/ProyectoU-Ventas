@@ -4,6 +4,9 @@ import type Selling_points_Data from "../types/selling_points_data";
 mongoose.set("strictQuery", false);
 
 const sellingPointSchema = new mongoose.Schema<Selling_points_Data>({
+    user_id: {
+        type: String
+    },
     name: {
         type: String,
         minLength: 3,

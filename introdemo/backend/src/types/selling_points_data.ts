@@ -1,5 +1,6 @@
 interface Selling_points_Data {
     "id": string,
+    "user_id": string,
     "name": string,
     "description": string,
     "static_point": boolean,

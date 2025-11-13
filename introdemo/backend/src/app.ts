@@ -21,7 +21,5 @@ app.use(express.static("dist"));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(loginRouter)
-
 app.use(errorHandler)
 app.use(unknownEndpoint)
