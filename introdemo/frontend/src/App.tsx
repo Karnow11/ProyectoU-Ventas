@@ -216,11 +216,6 @@ const App = () => {
         <Link to = "/sellingPointList">Listado SellingPoints</Link>
         |
         <Link to = "/formSellingPoint">Formulario Nuevo SellingPoint</Link>
-        |
-        <Link to = "/sellingPointList">Notas</Link>
-        |
-        <Link to = "/sellingPointList">Notas</Link>
-
       </div>
 
       <Routes>
