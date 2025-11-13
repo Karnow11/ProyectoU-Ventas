@@ -99,6 +99,7 @@ const App = () => {
   const [user, setUser] = useState<User | null>(null);
   const [errorMessageLogin, setErrorMessageLogin] = useState<string | null>(null);
   const [errorMessageCreate, setErrorMessageCreate] = useState<string | null>(null);
+  const [hidden_create, setHidden_create] = useState<number>(0);
 
   useEffect(() => {
     const init = async () => {
@@ -143,6 +144,7 @@ const App = () => {
       setUsernameCreate("")
       setMailCreate("")
       setPasswordCreate("")
+      setHidden_create(state => state + 1)
     } catch (exception: any) {
       setErrorMessageCreate(exception.response?.data?.error || "");
       setTimeout(() => {
@@ -182,7 +184,7 @@ const App = () => {
                 <button type="submit">login</button>
               </form>
             </Toggle>
-            <Toggle text="Create Account">
+             <Toggle key={hidden_create} text="Create Account">
               <form onSubmit={createUser}>
                 <div>
                   username
