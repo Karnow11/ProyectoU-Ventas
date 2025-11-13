@@ -3,6 +3,9 @@ import Selling_point from "../models/selling_points";
 import type Selling_points_Data from "../types/selling_points_data";
 import Review from "../models/reviews"
 import type Review_Data  from "../types/review_data"
+import SPModel from "../models/selling_points";
+import withUser from "../middlewares/authMiddelwares";
+import User from "../models/User";
 
 
 interface SPData {
@@ -10,82 +13,81 @@ interface SPData {
   reviews?: Review_Data[]
 }  
 
-
 const router = express.Router();
 
-router.get("/", async (request, response) => {
-  const sp = await Selling_point.find({});
-  response.json(sp);
+router.get("/", (request, response) => {
+  SPModel.find({}).then((sp) => {
+    response.json(sp);
+  });
 });
 
-
-router.get("/:id", async (request, response, next) => {
-    const id = request.params.id;
-    const points = await Selling_point.findById(id);
-    const reviews = await Review.find({ SP_id: id });
-
-    if (!points) {
-        return response.status(404).end();
-    }
-
-    const answer: SPData = {
-      selling_point: points,
-      reviews: reviews
-  }
-
-    if (answer) {
-      response.json(answer);
-    } else {
-      response.status(404).end();
-    }
+router.get("/:id", (request, response, next) => {
+  const id = request.params.id;
+  const sp = SPModel.findById(id);
+  const reviews = SPModel.find({ thread: id });
+  Promise.all([sp, reviews])
+    .then(([sp, reviews]) => {
+      if (sp) {
+        response.json({ selling_point: sp, reviews: reviews });
+      } else {
+        response.status(404).end();
+      }
+    })
+    .catch((error) => next(error));
 });
 
-router.post("/", async (request, response, next) => {
-    const body = request.body;
+router.post("/", withUser, async (request, response, next) => {
+  const body = request.body;
+  const user_id = request.userId
 
-    if (!body.name) {
-    response.status(400).json({
-      error: "Name missing",
-    })};
-    if (!body.description) {
-    response.status(400).json({
-      error: "Description missing",
-    });
+  const post = new SPModel({
+    name: body.name,
+    user_id,
+    description: body.description,
+    static_point: body.static_point,
+    product_type: body.product_type
+  });
 
-    } else {
-        const selling_point = {
-            name: body.name,
-            description: body.description,
-            static_point: body.static_point,
-            product_type: body.product_type,
-            reviews: {},
-        };
-        const selling_pointDocument = new Selling_point(selling_point);
-        const savedselling_point = await selling_pointDocument.save();
-        response.status(201).json(savedselling_point);
-    }
+  post.save()
+    .then((savedPost) => {
+      response.status(201).json(savedPost);
+    })
+    .catch((error) => next(error));
 });
 
 router.post("/:id", async (request, response, next) => {
-    const body = request.body;
-    const id = request.params.id;
 
-    if (!body.content) {
-    response.status(400).json({
-      error: "content missing",
-    });
+  const body = request.body;
+  const SPId = request.params.id;
 
-    } else {
-        const review = {
-            author: body.author || "anonymous",
-            content: body.content,
-            SP_id: id,
-        };
+  const token = request.cookies?.token;
 
-        const reviewDocument = new Review(review);
-        const savedReview = await reviewDocument.save();
-        response.status(201).json(savedReview);
-    }
+  const post = new SPModel({
+    author: body.author,
+    content: body.content,
+    SP_id: SPId,
+  });
+
+  post.save()
+    .then((savedPost) => {
+      response.status(201).json(savedPost);
+    })
+    .catch((error) => next(error));
+});
+
+router.put("/:id", (request, response, next) => {
+  const body = request.body;
+  const id = request.params.id;
+
+  SPModel.findByIdAndUpdate(id, body, { new: true })
+    .then((updatedPost) => {
+      if (updatedPost) {
+        response.json(updatedPost);
+      } else {
+        response.status(404).end();
+      }
+    })
+    .catch((error) => next(error));
 });
 
 export default router;
