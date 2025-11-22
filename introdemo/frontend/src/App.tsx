@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import axios from "axios"
 import {
   Link,
   Route,
@@ -9,7 +8,7 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-import type { sellingPoint } from './types/sellingPoint.ts';
+import type { SellingPoint } from './types/sellingPoint.ts';
 import SellingPointComp from './components/SellingPoint.tsx';
 import SP_list from "./components/sp_list.tsx";
 import FormSP from "./components/FormSP.tsx";
@@ -17,10 +16,12 @@ import FormSP from "./components/FormSP.tsx";
 import loginService from "./services/login.ts"
 import type {User} from './types/user.ts'
 import Toggle from "./utils/Toggle.tsx";
+import api from "./utils/axiosSecure.ts";
+import UserProfile from "./components/UserProfile.tsx";
 
 
 //Nuevos
-import type { Store } from "redux";
+//import type { Store } from "redux";
 //import type { Action } from "./store";
 
 const SellingPointList = () => {
@@ -72,25 +73,17 @@ const FormSellingPoint = () => {
 
 const DetalleSellingPoint = () => {
   const {id} = useParams();
-  const [sellingPointData, setSellingPointBase] = useState<sellingPoint>({
-    id: "",
-    static_point: false,
-    name: "base",
-    description: "base",
-    product_type: "base",
-  });
+  const [sellingPointData, setSellingPointBase] = useState<SellingPoint | null>(null);
 
-  useEffect( () => {
-    console.log(`usamos el useEffect con id :${id}`)
-    axios.get(`http://localhost:3001/api/selling_points/${id}`).then((response) => {
-      console.log("usamos el axios get threads")
-      console.log(response.data);
+  useEffect(() => {
+    api.get(`/api/selling_points/${id}`).then((response) => {
       setSellingPointBase(response.data.selling_point);
     });
   }, []);
+
   return (
     <div>
-      <SellingPointComp sellingPoint = {sellingPointData}/>
+      {sellingPointData && <SellingPointComp sellingPoint={sellingPointData}/>}
     </div>
   )
 }
@@ -165,7 +158,8 @@ const App = () => {
       <div>
         {user ? (
           <div>
-            {user.name}
+            <Link to = {`/profile/${user?.id}`}>{user.username}</Link>
+            <br />
             <button onClick={handleLogout}>Logout</button>
           </div>) : (
           <>
@@ -233,6 +227,7 @@ const App = () => {
         <Route path="/sellingPointSearch" element={<SellingPointSearch />} />
         <Route path="/sellingPoint/:id" element={<DetalleSellingPoint />} />
         <Route path="/formSellingPoint" element={<FormSellingPoint />} />
+        <Route path="/profile/:id" element={<UserProfile />} />
       </Routes>
     </Router>
   )

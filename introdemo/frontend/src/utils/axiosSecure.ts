@@ -1,16 +1,17 @@
 import axios from "axios";
 
-const axiosSecure = axios.create({
-    withCredentials: true,
+const api = axios.create({
+  baseURL: "http://localhost:3001",
+  withCredentials: true,
+});
+
+api.interceptors.request.use((config) => {
+  const csrf = localStorage.getItem("csrfToken");
+  if (csrf) {
+    config.headers["X-CSRF-Token"] = csrf;
+  }
+  return config;
 });
 
 
-axiosSecure.interceptors.request.use((config) => {
-    const csrfToken = localStorage.getItem("csrfToken");
-    if (csrfToken) {
-        config.headers["X-CSRF-Token"] = csrfToken;
-    }
-    return config;
-});
-
-export default axiosSecure;
+export default api;

@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../utils/axiosSecure";
 
 type Credentials = {
     username: string;
@@ -10,20 +10,6 @@ type Create = {
     email: string,
     password: string;
 };
-
-// crea un cliente con baseURL del backend y cookies habilitadas
-const api = axios.create({
-  baseURL: "http://localhost:3001",
-  withCredentials: true,
-});
-
-api.interceptors.request.use((config) => {
-  const csrf = localStorage.getItem("csrfToken");
-  if (csrf) {
-    config.headers["X-CSRF-Token"] = csrf;
-  }
-  return config;
-});
 
 const create = async (user: Create) => {
     return api.post("/api/users", user)
