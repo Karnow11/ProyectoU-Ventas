@@ -18,7 +18,6 @@ const SellingPointComp = ({ sellingPoint } : Prop) => {
         </div>
       </div>
     </div>
-    
   );
 }
 

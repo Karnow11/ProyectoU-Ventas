@@ -5,6 +5,8 @@ interface Selling_points_Data {
     "description": string,
     "static_point": boolean,
     "product_type": string,
+    "zone": string
+
 }
 
 export default Selling_points_Data;

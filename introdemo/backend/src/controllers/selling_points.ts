@@ -45,7 +45,8 @@ router.post("/", withUser, async (request, response, next) => {
     user_id,
     description: body.description,
     static_point: body.static_point,
-    product_type: body.product_type
+    product_type: body.product_type,
+    zone: body.zone
   });
 
   post.save()

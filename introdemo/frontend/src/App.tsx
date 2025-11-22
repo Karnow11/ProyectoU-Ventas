@@ -13,6 +13,7 @@ import type { sellingPoint } from './types/sellingPoint.ts';
 import SellingPointComp from './components/SellingPoint.tsx';
 import SP_list from "./components/sp_list.tsx";
 import FormSP from "./components/FormSP.tsx";
+import MapStaticSP from "./components/MapStaticSP.tsx";
 
 import loginService from "./services/login.ts"
 import type {User} from './types/user.ts'
@@ -22,6 +23,14 @@ import Toggle from "./utils/Toggle.tsx";
 //Nuevos
 import type { Store } from "redux";
 //import type { Action } from "./store";
+
+const InteractiveMap = () =>{
+  return (
+    <div>
+      <MapStaticSP/>
+    </div>
+  )
+}
 
 const SellingPointList = () => {
   const navigate = useNavigate();
@@ -77,7 +86,7 @@ const DetalleSellingPoint = () => {
     static_point: false,
     name: "base",
     description: "base",
-    product_type: "base",
+    product_type: "Comida",
   });
 
   useEffect( () => {
@@ -222,9 +231,8 @@ const App = () => {
         |
         <Link to = "/formSellingPoint">Formulario Nuevo SellingPoint</Link>
         |
-        <Link to = "/sellingPointList">Notas</Link>
+        <Link to = "/map">Mapa</Link>
         |
-        <Link to = "/sellingPointList">Notas</Link>
 
       </div>
 
@@ -233,6 +241,7 @@ const App = () => {
         <Route path="/sellingPointSearch" element={<SellingPointSearch />} />
         <Route path="/sellingPoint/:id" element={<DetalleSellingPoint />} />
         <Route path="/formSellingPoint" element={<FormSellingPoint />} />
+        <Route path="/map" element={<InteractiveMap />} />
       </Routes>
     </Router>
   )

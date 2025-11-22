@@ -30,6 +30,16 @@ const sellingPointSchema = new mongoose.Schema<Selling_points_Data>({
                 return admitidos.includes(valor);
             }
         }
+    },
+    zone: {
+        type: String,
+        default: "Otro",
+        validate: {
+            validator: (valor: string) => {
+                const admitidos = ["Otro","Casino","Salita Zone","Tokki Zone","Biblioteca","Hall Sur","Socalo","Cafeta","Quimica","Minas","Ebria","Espada y Escudo","Fisica","Araña","Electrica","Civil","Geología","IDIEM","Industrias"];
+                return admitidos.includes(valor);
+            }
+        }
     }
 }, {
     timestamps: true 

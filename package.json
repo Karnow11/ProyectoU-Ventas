@@ -1,6 +1,12 @@
 {
   "dependencies": {
     "@reduxjs/toolkit": "^2.10.1",
-    "react-redux": "^9.2.0"
+    "leaf": "^2.1.1",
+    "react-leaflet": "^5.0.0",
+    "react-redux": "^9.2.0",
+    "zustand": "^5.0.8"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.21"
   }
 }
