@@ -14,6 +14,7 @@ import SellingPointComp from './components/SellingPoint.tsx';
 import SP_list from "./components/sp_list.tsx";
 import FormSP from "./components/FormSP.tsx";
 import MapStaticSP from "./components/MapStaticSP.tsx";
+import SPSearch from "./components/SPSearch.tsx";
 
 import loginService from "./services/login.ts"
 import type {User} from './types/user.ts'
@@ -38,14 +39,6 @@ const SellingPointList = () => {
   return (
     <div>
       <div>
-        <input
-          type="text"
-          placeholder="id del selling point"
-          onChange={(e) => setId(String(e.target.value))}
-        />
-        <button onClick={() => navigate(`/sellingPoint/${id}`)}>Ir al SellingPoint</button>
-      </div>
-      <div>
         <SP_list/>
       </div>
     </div>
@@ -53,18 +46,9 @@ const SellingPointList = () => {
 }
 
 const SellingPointSearch = () => {
-  const navigate = useNavigate();
-  const [id, setId] = useState<string>("");
   return (
     <div>
-      <div>
-        <input
-          type="text"
-          placeholder="id del selling point"
-          onChange={(e) => setId(String(e.target.value))}
-        />
-        <button onClick={() => navigate(`/sellingPoint/${id}`)}>Ir al SellingPoint</button>
-      </div>
+      <SPSearch />
     </div>
   )
 }

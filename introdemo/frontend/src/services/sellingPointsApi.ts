@@ -1,6 +1,5 @@
 import axios from "axios";
 import type { sellingPoint, SPZone, ProductType } from "../types/sellingPoint";
-// crea un cliente con baseURL del backend y cookies habilitadas
 
 interface Props {
     name: string,
@@ -14,7 +13,6 @@ const api = axios.create({
   baseURL: "http://localhost:3001",
   withCredentials: true,
 });
-
 
 api.interceptors.request.use((config) => {
   const csrf = localStorage.getItem("csrfToken");
@@ -31,21 +29,26 @@ export const getAll = async () => {
 
 export const addSelling = async ({name, static_point, product_type, description, zone}: Props) => {
     const sellingObject: Omit <sellingPoint, "id"> = {
-      name: name,
+      name,
       static_point,
       product_type,
       description,
       zone
     }
 
-    const data = (await api.post("/api/selling_points", sellingObject)).data
-    return data
+    return (await api.post("/api/selling_points", sellingObject)).data;
 }
 
 export const getSellingPointsByZone = async( zone: SPZone) => {
   const allSP: sellingPoint[] = await getAll();
   const StaticSP: sellingPoint[] = allSP.filter(sp => sp.static_point === true);
   const filteredSP: sellingPoint[] = StaticSP.filter(sp => sp.zone === zone);
+  return filteredSP;
+}
+
+export const getSellingPointsByStoreName = async(name: string) => {
+  const allSP: sellingPoint[] = await getAll();
+  const filteredSP: sellingPoint[] = allSP.filter(sp => sp.name.toLowerCase().includes(name.toLowerCase()));
   return filteredSP;
 }
 
