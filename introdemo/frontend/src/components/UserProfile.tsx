@@ -18,7 +18,7 @@ const UserProfile = () => {
         api.get(`/api/selling_points/user/${id}`).then((response) => {
             changeSP(response.data)
         })
-    }, []);
+    }, [id]);
 
     return (
         <div>
@@ -38,7 +38,7 @@ const UserProfile = () => {
                 ))}
             </ul>
         </div>
-      )
+    )
 }
 
 export default UserProfile
