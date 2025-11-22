@@ -33,8 +33,7 @@ router.post("/", async (request, response) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
       });
-      console.log(response.getHeaders())
-      response.status(200).send({name: user.username });
+      response.status(200).send({id: user.id, username: user.username });
     }
   } else {
     response.status(401).json({
@@ -46,7 +45,7 @@ router.post("/", async (request, response) => {
 router.get("/me", withUser, async (request, response, next) => {
   const body = request.body;
   const user = await User.findById(request.userId);
-  response.status(200).json(user ? { name: user.username } : null);
+  response.status(200).json(user ? { id: user.id, username: user.username } : null);
 });
 
 router.post("/logout", (_, response) =>  {
