@@ -99,6 +99,7 @@ const App = () => {
   const [user, setUser] = useState<User | null>(null);
   const [errorMessageLogin, setErrorMessageLogin] = useState<string | null>(null);
   const [errorMessageCreate, setErrorMessageCreate] = useState<string | null>(null);
+  const [sucessMessageCreate, setSucessMessageCreate] = useState<string | null>(null);  
   const [hidden_create, setHidden_create] = useState<number>(0);
 
   useEffect(() => {
@@ -145,6 +146,10 @@ const App = () => {
       setMailCreate("")
       setPasswordCreate("")
       setHidden_create(state => state + 1)
+      setSucessMessageCreate("Usuario creado con exito");
+      setTimeout(() => {
+        setSucessMessageCreate(null);
+      }, 3000);
     } catch (exception: any) {
       setErrorMessageCreate(exception.response?.data?.error || "");
       setTimeout(() => {
@@ -158,7 +163,7 @@ const App = () => {
       <div className = "Titulo">
         <h1>U-Ventas</h1>
       </div>
-
+        <p style={{ color: "green" }}>{sucessMessageCreate}</p>
       <div>
         {user ? (
           <div>
