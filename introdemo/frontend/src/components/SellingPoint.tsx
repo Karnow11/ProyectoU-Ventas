@@ -58,6 +58,7 @@ const SellingPointComp = ({ sellingPoint } : Prop) => {
           <p>{sellingPoint.description}</p>
         </div>
         <form onSubmit={onSubmit} className='point-title'>
+        {/*Falta verificar si el id del estado global esta en la lista para mostrar el form y eveitar que el mismo usuario reseñe 2 veces*/}
           <h3>Escribe una reseña</h3>
           <label>
             Tu calificación:

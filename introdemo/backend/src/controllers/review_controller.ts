@@ -21,6 +21,13 @@ router.post("/sp/:id", withUser, async (request, response, next) => {
   const user_id = request.userId
   const sp_id = request.params.id
 
+  const user_review = await Review.find({user_id})
+
+  if(user_review.length !== 0){
+    response.status(400).end()
+    return
+  }
+
   const review = new Review({
     user_id,
     sp_id,
