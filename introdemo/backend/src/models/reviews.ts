@@ -4,19 +4,25 @@ import Review_Data from "../types/review_data";
 mongoose.set("strictQuery", false);
 
 const postSchema = new mongoose.Schema<Review_Data>({
-    author: {
+    user_id: {
         type: String,
-        minLength: 3,
-        maxLength: 30
+        required: true
+    },
+    sp_id: {
+        type: String,
+        required: true
+    },
+    qualification: {
+      type: Number,
+      min: 1,
+      max: 5,
+      required: true
     },
     content: {
-        type: String,
-        minLength: 10,
-        maxLength: 500
-    },
-    SP_id: {
-        type: String,
-    },
+      type: String,
+      minLength: 0,
+      maxLength: 500
+  },
 }, {
     timestamps: true 
 });
@@ -32,6 +38,6 @@ postSchema.set("toJSON", {
   },
 });
 
-const Review = mongoose.model<Review_Data>("Post", postSchema);
+const Review = mongoose.model<Review_Data>("Review", postSchema);
 
 export default Review;

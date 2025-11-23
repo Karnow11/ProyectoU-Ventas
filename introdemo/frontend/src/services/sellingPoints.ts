@@ -7,10 +7,9 @@ const getAll = async () => {
     return response.data;
 };
 
-const addSelling = async ({name, user_id, static_point, product_type, description}: SellingPoint) => {
-    const sellingObject: Omit <SellingPoint, "id"> = {
+const addSelling = async ({name, static_point, product_type, description}: Omit <SellingPoint, "id" | "user_id">) => {
+    const sellingObject: Omit <SellingPoint, "id" | "user_id"> = {
       name,
-      user_id,
       static_point,
       product_type,
       description

@@ -1,12 +1,10 @@
 import { useState } from 'react';
-import axios from "axios";
-import type { sellingPoint } from "../types/sellingPoint.tsx";
 import { useNavigate } from "react-router-dom";
 import sellingPoints from '../services/sellingPoints.ts';
 
 const FormSP = () => {
   const [name, setName] = useState<string>("")
-  const [static_dynamic, setStatic_dynamyc] = useState<boolean>(false)
+  const [static_point, setStatic_dynamyc] = useState<boolean>(false)
   const [product_type, setProduct_type] = useState<string>("")
   const [description, setDescription] = useState<string>("")
   const navigate = useNavigate();
@@ -14,7 +12,7 @@ const FormSP = () => {
 
   const addNew = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    sellingPoints.addSelling({name, static_point: static_dynamic, product_type, description}).then(() => { navigate("/sellingPointList")})
+    sellingPoints.addSelling({name, static_point, product_type, description}).then(() => {navigate("/sellingPointList")})
   }
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
