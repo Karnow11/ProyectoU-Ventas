@@ -13,6 +13,7 @@ import cookieParser from "cookie-parser";
 import mongoose from "mongoose"; // Add this
 import config from "./utils/config"; // Add this
 import spRouter from "./controllers/selling_points"; // Add this
+import reviewrouter from "./controllers/review_controller"
 
 mongoose.set("strictQuery", false);
 if (config.MONGODB_URI) {
@@ -56,6 +57,7 @@ app.use(requestLogger);
 app.use("/api/users", userRouter);
 app.use("/api/login", loginRouter);
 app.use("/api/selling_points", spRouter)
+app.use("/api/reviews", reviewrouter)
 app.use(express.static("dist"));
 
 const errorHandler = (

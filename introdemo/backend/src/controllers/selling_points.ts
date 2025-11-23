@@ -28,7 +28,6 @@ router.get("/:id", (request, response, next) => {
   Promise.all([sp, reviews])
     .then(([sp, reviews]) => {
       if (sp) {
-        console.log(sp)
         response.json({ selling_point: sp, reviews: reviews });
       } else {
         response.status(404).end();

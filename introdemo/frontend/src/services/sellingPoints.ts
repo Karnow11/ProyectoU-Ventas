@@ -9,8 +9,8 @@ const getAll = async () => {
 
 const addSelling = async ({name, user_id, static_point, product_type, description}: sellingPoint) => {
     const sellingObject: Omit <sellingPoint, "id"> = {
-      name,
       user_id,
+      name,
       static_point,
       product_type,
       description
