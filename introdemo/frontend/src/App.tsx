@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./App.css";
+import { useNavigate } from "react-router-dom";
 import {
   Link,
   Route,
@@ -20,10 +21,18 @@ import Toggle from "./utils/Toggle.tsx";
 import api from "./utils/axiosSecure.ts";
 import UserProfile from "./components/UserProfile.tsx";
 
-
-//Nuevos
-//import type { Store } from "redux";
-//import type { Action } from "./store";
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  Heading,
+  HStack,
+  Field,
+  Input,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 
 const InteractiveMap = () =>{
   return (
@@ -34,30 +43,32 @@ const InteractiveMap = () =>{
 }
 
 const SellingPointList = () => {
+  const navigate = useNavigate();
+  const [id, setId] = useState<string>("");
+
   return (
-    <div>
-      <div>
-        <SP_list/>
-      </div>
-    </div>
+
+    <Box>
+      <Box mt={4}>
+        <SP_list />
+      </Box>
+    </Box>
   )
 }
 
 const SellingPointSearch = () => {
   return (
-    <div>
+    <Box>
       <SPSearch />
-    </div>
+    </Box>
   )
 }
 
 const FormSellingPoint = () => {
   return (
-    <div>
-      <div>
-        <FormSP/>
-      </div>
-    </div>
+    <Box>
+      <FormSP />
+    </Box>
   )
 }
 
@@ -73,15 +84,22 @@ const DetalleSellingPoint = () => {
   });
 
   useEffect(() => {
+    if (!id) return;
     api.get(`/api/selling_points/${id}`).then((response) => {
       setSellingPointBase(response.data.selling_point);
     });
-  }, []);
+  }, [id]);
 
   return (
+    <Box>
+      {sellingPointData && <SellingPointComp sellingPoint={sellingPointData} />}
+    </Box>
+
+    /*
     <div>
       {sellingPointData && <SellingPointComp sellingPoint={sellingPointData}/>}
     </div>
+    */
   )
 }
 
@@ -148,84 +166,170 @@ const App = () => {
 
   return (
     <Router >
-      <div className = "Titulo">
-        <h1>U-Ventas</h1>
-      </div>
+      <Box minH="100vh">
+        <Container maxW="5xl" py={6}>
+          {/* Header / Título */}
+          <Flex
+            as="header"
+            className="Titulo"
+            justify="space-between"
+            align="center"
+            mb={8}
+          >
+            <Heading as="h1" size="lg" color="teal.600">
+              U-Ventas
+            </Heading>
 
-      <div>
-        {user ? (
-          <div>
-            <Link to = {`/profile/${user?.id}`}>{user.username}</Link>
-            <br />
-            <button onClick={handleLogout}>Logout</button>
-          </div>) : (
-          <>
-            <Toggle text="Login">
-              <form onSubmit={handleLogin}>
-                <div>
-                  username
-                  <input type="text" value={username_log} name="Username"
-                    onChange={({ target }) => setUsernameLog(target.value)}
-                  />
-                </div>
-                <div>
-                  password
-                  <input type="password" value={password_log} name="Password"
-                    onChange={({ target }) => setPasswordLog(target.value)}
-                  />
-                </div>
-                <p style={{ color: "red" }}>{errorMessageLogin}</p>
-                <button type="submit">login</button>
-              </form>
-            </Toggle>
-            <Toggle text="Create Account">
-              <form onSubmit={createUser}>
-                <div>
-                  username
-                  <input type="text" value={username_create} name="Username"
-                    onChange={({ target }) => setUsernameCreate(target.value)}
-                  />
-                </div>
-                <div>
-                  mail
-                  <input type="text" value={mail_create} name="Mail"
-                    onChange={({ target }) => setMailCreate(target.value)}
-                  />
-                </div>
-                <div>
-                  password
-                  <input type="password" value={password_create} name="Password"
-                    onChange={({ target }) => setPasswordCreate(target.value)}
-                  />
-                </div>
-                <p style={{ color: "red" }}>{errorMessageCreate}</p>
-                <button type="submit">Create</button>
-              </form>
-            </Toggle>
-          </>)}
-      </div>
+            {user && (
+              <HStack gap={4}>
+                <Link to = {`/profile/${user?.id}`} style={{ color: "#285E61", fontWeight: 500 }}>{user.username}</Link>
+                <Button
+                  size="sm"
+                  colorScheme="teal"
+                  variant="outline"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
+              </HStack>
+            )}
+          </Flex>
 
-      <div className = "NavBar">
-        <br></br>
-        <Link to = "/sellingPointSearch">Busqueda SellingPoints</Link>
-        |
-        <Link to = "/sellingPointList">Listado SellingPoints</Link>
-        |
-        <Link to = "/formSellingPoint">Formulario Nuevo SellingPoint</Link>
-        |
-        <Link to = "/map">Mapa</Link>
-        |
+          {/* Login / Create Account (solo si no hay usuario) */}
+          {!user && (
+            <Flex gap={6} align="flex-start" mb={8} wrap="wrap">
+              <Box flex="1" minW="260px">
+                <Toggle text="Login">
+                  <Box>
+                  <form onSubmit={handleLogin}>
+                    <VStack gap={4} align="stretch">
+                      <Field.Root>
+                        <Field.Label>Username</Field.Label>
+                        <Input
+                          type="text"
+                          value={username_log}
+                          name="Username"
+                          onChange={({ target }) =>
+                            setUsernameLog(target.value)
+                          }
+                        />
+                      </Field.Root>
+                      <Field.Root>
+                        <Field.Label>Password</Field.Label>
+                        <Input
+                          type="password"
+                          value={password_log}
+                          name="Password"
+                          onChange={({ target }) =>
+                            setPasswordLog(target.value)
+                          }
+                        />
+                      </Field.Root>
+                      {errorMessageLogin && (
+                        <Text color="red.500" fontSize="sm">
+                          {errorMessageLogin}
+                        </Text>
+                      )}
+                      <Button type="submit" colorScheme="teal" w="full">
+                        Login
+                      </Button>
+                    </VStack>
+                    </form>
+                  </Box>
+                </Toggle>
+              </Box>
 
-      </div>
+              <Box flex="1" minW="260px">
+                <Toggle text="Create Account">
+                  <Box>
+                    <form onSubmit={createUser}>
+                    <VStack gap={4} align="stretch">
+                      <Field.Root>
+                        <Field.Label>Username</Field.Label>
+                        <Input
+                          type="text"
+                          value={username_create}
+                          name="Username"
+                          onChange={({ target }) =>
+                            setUsernameCreate(target.value)
+                          }
+                        />
+                      </Field.Root>
+                      <Field.Root>
+                        <Field.Label>Mail</Field.Label>
+                        <Input
+                          type="text"
+                          value={mail_create}
+                          name="Mail"
+                          onChange={({ target }) =>
+                            setMailCreate(target.value)
+                          }
+                        />
+                      </Field.Root>
+                      <Field.Root>
+                        <Field.Label>Password</Field.Label>
+                        <Input
+                          type="password"
+                          value={password_create}
+                          name="Password"
+                          onChange={({ target }) =>
+                            setPasswordCreate(target.value)
+                          }
+                        />
+                      </Field.Root>
+                      {errorMessageCreate && (
+                        <Text color="red.500" fontSize="sm">
+                          {errorMessageCreate}
+                        </Text>
+                      )}
+                      <Button
+                        type="submit"
+                        colorScheme="teal"
+                        variant="outline"
+                        w="full"
+                      >
+                        Create
+                      </Button>
+                    </VStack>
+                    </form>
+                  </Box>
+                </Toggle>
+              </Box>
+            </Flex>
+          )}
+          
 
-      <Routes>
-        <Route path="/sellingPointList" element={<SellingPointList />} />
-        <Route path="/sellingPointSearch" element={<SellingPointSearch />} />
-        <Route path="/sellingPoint/:id" element={<DetalleSellingPoint />} />
-        <Route path="/formSellingPoint" element={<FormSellingPoint />} />
-        <Route path="/map" element={<InteractiveMap />} />
-        <Route path="/profile/:id" element={<UserProfile />} />
-      </Routes>
+          {/* NavBar con Chakra */}
+          <Box as="nav" className="NavBar" mb={6}>
+            <HStack gap={4} wrap="wrap">
+              <Link to = {`/sellingPointSearch`} style={{ color: "#285E61", fontWeight: 500 }}>Búsqueda SellingPoints</Link>
+          
+              <Link to = {`/sellingPointList`} style={{ color: "#285E61", fontWeight: 500 }}>Listado SellingPoints</Link>
+
+              <Link to = {`/formSellingPoint`} style={{ color: "#285E61", fontWeight: 500 }}>Formulario Nuevo SellingPoint</Link>
+              
+              <Link to = {`/map`} style={{ color: "#285E61", fontWeight: 500 }}>Mapa Interactivo</Link>
+
+            </HStack>
+          </Box>
+
+          {/* Rutas */}
+          <Routes>
+            <Route path="/sellingPointList" element={<SellingPointList />} />
+            <Route
+              path="/sellingPointSearch"
+              element={<SellingPointSearch />}
+            />
+            <Route
+              path="/sellingPoint/:id"
+              element={<DetalleSellingPoint />}
+            />
+            <Route path="/formSellingPoint" element={<FormSellingPoint />} />
+            <Route path="/profile/:id" element={<UserProfile />} />
+            <Route path="/map" element={<InteractiveMap />} />
+          </Routes>
+        </Container>
+      </Box>
     </Router>
   )
 }
