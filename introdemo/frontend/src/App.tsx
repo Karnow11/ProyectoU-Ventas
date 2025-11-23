@@ -221,8 +221,16 @@ const App = () => {
         <Link to = "/sellingPointSearch">Busqueda SellingPoints</Link>
         |
         <Link to = "/sellingPointList">Listado SellingPoints</Link>
-        |
-        <Link to = "/formSellingPoint">Formulario Nuevo SellingPoint</Link>
+
+        {user ? (
+      <>
+      |
+      <Link to = "/formSellingPoint">Formulario Nuevo SellingPoint</Link>
+      </>
+      ) : null}
+
+      
+
       </div>
 
       <Routes>
