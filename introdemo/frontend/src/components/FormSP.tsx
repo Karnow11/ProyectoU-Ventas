@@ -4,12 +4,12 @@ import type { sellingPoint } from "../types/sellingPoint.tsx";
 import { useNavigate } from "react-router-dom";
 
 const FormSP = () => {
-  const [name, setName] = useState<string>("")
-  const [static_dynamic, setStatic_dynamyc] = useState<boolean>(false)
-  const [product_type, setProduct_type] = useState<string>("")
-  const [description, setDescription] = useState<string>("")
+  const [name, setName] = useState<string>("");
+  const [static_dynamic, setStatic_dynamyc] = useState<boolean>(true);
+  const [product_type, setProduct_type] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [validateFormMessage, setValidateFormMessage] = useState<string | null>(null);  
   const navigate = useNavigate();
-
 
   const addSelling = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -20,15 +20,40 @@ const FormSP = () => {
       description: description
     }
 
-    axios.post("http://localhost:3001/api/selling_points", sellingObject).then(() => { navigate("/sellingPointList")})
-    //console.log("nombre form: " + name)
-    
-    //console.log("punto del form: " + static_dynamic)
-    
-    //console.log("tipo producto form: " + product_type)
+    axios.post("http://localhost:3001/api/selling_points", sellingObject).then(() => { 
+      navigate("/sellingPointList")}
+    ).catch((error) => {
+      setValidateFormMessage("Error al mandar formulario" );
 
-    //console.log("descripcion form: " + description)
+      setTimeout(() => {
+        setValidateFormMessage(null);
+      }, 3000);
+    });
   }
+/*
+  const validateForm = () => {
+    if (name.length < 3 || name.length > 30) {
+      setValidateFormMessage("nombre");
+      console.log("nombre incorrecto"); 
+    }
+    if (!static_dynamic) {
+      setValidateFormMessage( validateFormMessage + " punto del servicio"); 
+      console.log("punto de servicio incorrecto");
+    }
+    if (!product_type) {  
+      setValidateFormMessage(validateFormMessage + " tipo de servicio o producto"); 
+      console.log("tipo de servicio o producto incorrecto");
+    }
+    if (description.length < 10 || description.length > 50) {
+      setValidateFormMessage(validateFormMessage + " descripcion"); 
+      console.log("descripcion incorrecto");
+    }
+    if (validateFormMessage !== null || validateFormMessage) {
+      setValidateFormMessage("Error en los siguientes campos: "+ validateFormMessage); 
+      console.log("Error en el formulario");
+    }  
+  }
+*/
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -55,6 +80,7 @@ const FormSP = () => {
     <>
     <div className='formSP-container'>
         <h1>Formulario de ventas</h1>
+        <p style={{ color: "red" }}>{validateFormMessage}</p>
       <form onSubmit={addSelling} className = "formSP">
           <label>
         Nombre de tienda <input type="text" value={name} onChange ={handleNameChange}/>
