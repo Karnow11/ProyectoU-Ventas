@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import type { SellingPoint } from "../types/sellingPoint.ts";
+import type { sellingPoint } from "../types/sellingPoint.ts";
 import type { User } from "../types/user.ts";
 import api from "../utils/axiosSecure.ts";
 import { Link } from "react-router-dom";
@@ -7,7 +7,7 @@ import type { Review } from "../types/review.ts";
 import { TextField } from "@mui/material";
 
 interface Prop {
-    sellingPoint: SellingPoint;
+    sellingPoint: sellingPoint;
 }
 
 const SellingPointComp = ({ sellingPoint } : Prop) => {
@@ -16,7 +16,14 @@ const SellingPointComp = ({ sellingPoint } : Prop) => {
   const [content, changeContent] = useState("")
   const [reviews, changeReviews] = useState<Review[]>([])
 
+  console.log(sellingPoint.user_id);
+
   useEffect(() => {
+    if (sellingPoint.user_id == null) {
+      console.log("useEffect: user_id es null/undefined, no se llama a la API");
+      return;
+    };
+
     api.get(`/api/users/${sellingPoint.user_id}`).then((response) => {
       changeUser(response.data);
     });
@@ -24,7 +31,7 @@ const SellingPointComp = ({ sellingPoint } : Prop) => {
     api.get(`/api/reviews/sp/${sellingPoint.user_id}`).then((response) => {
       changeReviews(response.data.reviews);
     });
-  }, []);
+  }, [sellingPoint.user_id]);
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -44,6 +51,8 @@ const SellingPointComp = ({ sellingPoint } : Prop) => {
   }
 
   const containerClass = sellingPoint.static_point ? "static-comp" : "nonstatic-comp";
+
+
   
   return (
     <div>

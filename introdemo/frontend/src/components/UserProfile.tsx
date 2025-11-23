@@ -2,12 +2,12 @@ import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import type { User } from "../types/user"
 import api from "../utils/axiosSecure"
-import type { SellingPoint } from "../types/sellingPoint"
+import type { sellingPoint } from "../types/sellingPoint"
 
 const UserProfile = () => {
     const {id} = useParams()
     const [user, changeUser] = useState<User | null>(null)
-    const [selling_points, changeSP] = useState<SellingPoint[]>([])
+    const [selling_points, changeSP] = useState<sellingPoint[]>([])
 
     useEffect( () => {
 
