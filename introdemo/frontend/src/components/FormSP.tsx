@@ -22,7 +22,7 @@ const FormSP = () => {
 
     axios.post("http://localhost:3001/api/selling_points", sellingObject).then(() => { 
       navigate("/sellingPointList")}
-    ).catch((error) => {
+    ).catch((_) => {
       setValidateFormMessage("Error al mandar formulario" );
 
       setTimeout(() => {
@@ -30,30 +30,6 @@ const FormSP = () => {
       }, 3000);
     });
   }
-/*
-  const validateForm = () => {
-    if (name.length < 3 || name.length > 30) {
-      setValidateFormMessage("nombre");
-      console.log("nombre incorrecto"); 
-    }
-    if (!static_dynamic) {
-      setValidateFormMessage( validateFormMessage + " punto del servicio"); 
-      console.log("punto de servicio incorrecto");
-    }
-    if (!product_type) {  
-      setValidateFormMessage(validateFormMessage + " tipo de servicio o producto"); 
-      console.log("tipo de servicio o producto incorrecto");
-    }
-    if (description.length < 10 || description.length > 50) {
-      setValidateFormMessage(validateFormMessage + " descripcion"); 
-      console.log("descripcion incorrecto");
-    }
-    if (validateFormMessage !== null || validateFormMessage) {
-      setValidateFormMessage("Error en los siguientes campos: "+ validateFormMessage); 
-      console.log("Error en el formulario");
-    }  
-  }
-*/
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
