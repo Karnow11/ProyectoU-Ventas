@@ -1,14 +1,13 @@
 import { create } from "zustand";
 import type { sellingPoint, SPZone } from "../types/sellingPoint"
 //import { createTask, getAllTasks, getTask, updateTaskStatus, getTasksByCategory } from "../services/taskApi";
-import { getAll, addSelling, getSellingPointsByZone, getSellingPointsByStoreName } from "../services/sellingPointsApi";
+import { getAll, getSellingPointsByZone, getSellingPointsByStoreName } from "../services/sellingPointsApi";
 
 type SPState = {
     SP?: sellingPoint[];
     filterZone?: SPZone;
 
     fetchSP: () => Promise<void>;
-    addSP: (task: Omit<sellingPoint, "id">) => Promise<void>;
     changeFilterZone: (category: SPZone) => Promise<void>;
     changeSearch: (name: string) => Promise<void>;
 
@@ -24,12 +23,6 @@ export const SPStore = create<SPState>((set) => ({
         set({SP: allSP});
 
     },
-
-    addSP: async (sp: Omit<sellingPoint, "id">) => {
-        //const createdSP = (await addSelling(sp)) as sellingPoint;
-        //set((state: SPState) => ({SP: state.SP ? [...state.SP, createdSP] : [createdSP]}));
-    },
-
     changeFilterZone: async (zone: SPZone) => {
         if (zone) {
             const filteredSP = await getSellingPointsByZone(zone);

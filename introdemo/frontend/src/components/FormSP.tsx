@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import axios from "axios";
-import type { SPZone, sellingPoint, ProductType } from "../types/sellingPoint";
+import type { SPZone, ProductType } from "../types/sellingPoint";
 import { useNavigate } from "react-router-dom";
 import sellingPoints from '../services/sellingPointsApi';
 import { SPStore } from '../store/SP_store';
@@ -80,10 +79,11 @@ const FormSP = () => {
             Tipo de producto o servicio 
             <select value={product_type} onChange={handleProduct_typeChange}>
               <option value="Comida">Comida</option>
-              <option value="Ropa">Ropa</option>
               <option value="Libros">Libros</option>
               <option value="Manualidades">Manualidades</option>
+              <option value="Ropa">Ropa</option>
               <option value="Otro">Otro</option>
+              
             </select>
           </label>
         <br></br>
@@ -91,24 +91,24 @@ const FormSP = () => {
         Zona de servicio 
         <select value={zone} onChange={handleZoneChange} required>
           <option value="">Selecciona una zona</option>
-          <option value="Casino">Casino</option>
-          <option value="Salita Zone">Salita Zone</option>
-          <option value="Tokki Zone">Tokki Zone</option>
+          <option value="Araña">Araña</option>
           <option value="Biblioteca">Biblioteca</option>
-          <option value="Hall Sur">Hall Sur</option>
-          <option value="Socalo">Socalo</option>
           <option value="Cafeta">Cafeta</option>
-          <option value="Quimica">Quimica</option>
-          <option value="Minas">Minas</option>
+          <option value="Casino">Casino</option>
+          <option value="Civil">Civil</option>
           <option value="Ebria">Ebria</option>
+          <option value="Electrica">Electrica</option>
           <option value="Espada y Escudo">Espada y Escudo</option>
           <option value="Fisica">Fisica</option>
-          <option value="Araña">Araña</option>
-          <option value="Electrica">Electrica</option>
-          <option value="Civil">Civil</option>
           <option value="Geologia">Geología</option>
+          <option value="Hall Sur">Hall Sur</option>
           <option value="IDIEM">IDIEM</option>
           <option value="Industrias">Industrias</option>
+          <option value="Minas">Minas</option>
+          <option value="Quimica">Quimica</option>
+          <option value="Salita Zone">Salita Zone</option>
+          <option value="Socalo">Socalo</option>
+          <option value="Tokki Zone">Tokki Zone</option>
         </select>
           </label>
         <br></br>
