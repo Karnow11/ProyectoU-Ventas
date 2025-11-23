@@ -1,6 +1,6 @@
 // src/components/SPList.tsx
 import { useEffect, useMemo, useState } from "react";
-import type { SellingPoint } from "../types/sellingPoint";
+import type { sellingPoint } from "../types/sellingPoint";
 import { Link, useSearchParams } from "react-router-dom";
 import api from "../utils/axiosSecure";
 
@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default function SPList({ initialMode }: Props) {
-  const [items, setItems] = useState<SellingPoint[]>([]);
+  const [items, setItems] = useState<sellingPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
 

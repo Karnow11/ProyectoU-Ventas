@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const SPSearch = () => {
-    const { SP, fetchSP, changeSearch } = SPStore();
+    const { SP, changeSearch } = SPStore();
     const [searchTerm, setSearchTerm] = useState<string>("");
 
     useEffect(() => {

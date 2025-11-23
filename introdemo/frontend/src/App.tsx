@@ -5,7 +5,6 @@ import {
   Route,
   BrowserRouter as Router,
   Routes,
-  useNavigate,
   useParams,
 } from "react-router-dom";
 import type { sellingPoint } from './types/sellingPoint.ts';
@@ -35,8 +34,6 @@ const InteractiveMap = () =>{
 }
 
 const SellingPointList = () => {
-  const navigate = useNavigate();
-  const [id, setId] = useState<string>("");
   return (
     <div>
       <div>
@@ -72,6 +69,7 @@ const DetalleSellingPoint = () => {
     name: "base",
     description: "base",
     product_type: "Comida",
+    user_id: "null"
   });
 
   useEffect(() => {

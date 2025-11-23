@@ -7,6 +7,7 @@ interface Props {
     product_type: ProductType,
     description: string,
     zone: SPZone
+    user_id: string
 }
 
 const api = axios.create({
@@ -27,13 +28,14 @@ export const getAll = async () => {
     return response.data;
 };
 
-export const addSelling = async ({name, static_point, product_type, description, zone}: Props) => {
+export const addSelling = async ({name, static_point, product_type, description, zone, user_id}: Props) => {
     const sellingObject: Omit <sellingPoint, "id"> = {
       name,
       static_point,
       product_type,
       description,
-      zone
+      zone,
+      user_id
     }
 
     return (await api.post("/api/selling_points", sellingObject)).data;
