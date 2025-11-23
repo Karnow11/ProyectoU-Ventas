@@ -74,14 +74,15 @@ const FormSellingPoint = () => {
 
 const DetalleSellingPoint = () => {
   const {id} = useParams();
-  const [sellingPointData, setSellingPointBase] = useState<sellingPoint>({
+  const [sellingPointData, setSellingPointBase] = useState<sellingPoint | null>(null);
+  /*const [sellingPointData, setSellingPointBase] = useState<sellingPoint>({
     id: "",
     static_point: false,
     name: "base",
     description: "base",
     product_type: "Comida",
     user_id: "null"
-  });
+  });*/
 
   useEffect(() => {
     if (!id) return;

@@ -26,7 +26,7 @@ const sellingPointSchema = new mongoose.Schema<Selling_points_Data>({
         default: "Otro",
         validate: {
             validator: (valor: string) => {
-                const admitidos = ["Comida","Artesania","Servicios","Ropa"];
+                const admitidos = ["Comida","Libros","Manualidades","Ropa","Otro"];
                 return admitidos.includes(valor);
             }
         }

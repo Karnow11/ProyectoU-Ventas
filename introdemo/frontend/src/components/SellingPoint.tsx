@@ -19,16 +19,16 @@ const SellingPointComp = ({ sellingPoint } : Prop) => {
   console.log(sellingPoint.user_id);
 
   useEffect(() => {
-    if (sellingPoint.user_id == null) {
+    /*if (sellingPoint.user_id == null) {
       console.log("useEffect: user_id es null/undefined, no se llama a la API");
       return;
-    };
+    };*/
 
     api.get(`/api/users/${sellingPoint.user_id}`).then((response) => {
       changeUser(response.data);
     });
 
-    api.get(`/api/reviews/sp/${sellingPoint.user_id}`).then((response) => {
+    api.get(`/api/reviews/sp/${sellingPoint.id}`).then((response) => {
       changeReviews(response.data.reviews);
     });
   }, [sellingPoint.user_id]);
@@ -41,8 +41,8 @@ const SellingPointComp = ({ sellingPoint } : Prop) => {
       content
     }
 
-    await api.post(`/api/reviews/sp/${sellingPoint.user_id}`, review).then(() => {
-      api.get(`/api/reviews/sp/${sellingPoint.user_id}`).then((response) => {
+    await api.post(`/api/reviews/sp/${sellingPoint.id}`, review).then(() => {
+      api.get(`/api/reviews/sp/${sellingPoint.id}`).then((response) => {
         changeReviews(response.data.reviews);
       });
       changeQualification(0)
