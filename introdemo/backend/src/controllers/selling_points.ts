@@ -28,6 +28,7 @@ router.get("/:id", (request, response, next) => {
   Promise.all([sp, reviews])
     .then(([sp, reviews]) => {
       if (sp) {
+        console.log(sp)
         response.json({ selling_point: sp, reviews: reviews });
       } else {
         response.status(404).end();
@@ -90,5 +91,12 @@ router.put("/:id", (request, response, next) => {
     })
     .catch((error) => next(error));
 });
+
+router.get("/user/:id", async (request, response, next) => {
+  const user_id = request.params.id
+  SPModel.find({user_id}).then((sp) => {
+    response.json(sp);
+  }).catch((error) => next(error));
+})
 
 export default router;

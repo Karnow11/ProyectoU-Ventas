@@ -1,8 +1,8 @@
 // src/components/SPList.tsx
 import { useEffect, useMemo, useState } from "react";
-import axios from "axios";
-import type { sellingPoint } from "../types/sellingPoint";
+import type { SellingPoint } from "../types/sellingPoint";
 import { Link, useSearchParams } from "react-router-dom";
+import api from "../utils/axiosSecure";
 
 type Mode = "all" | "static" | "dynamic";
 
@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default function SPList({ initialMode }: Props) {
-  const [items, setItems] = useState<sellingPoint[]>([]);
+  const [items, setItems] = useState<SellingPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
 
@@ -27,8 +27,8 @@ export default function SPList({ initialMode }: Props) {
   useEffect(() => {
     let on = true;
     setLoading(true);
-    axios
-      .get("http://localhost:3001/api/selling_points")
+    api
+      .get("/api/selling_points")
       .then((r) => on && setItems(r.data))
       .catch((e) => on && setErr(e?.message ?? "Error cargando puntos"))
       .finally(() => on && setLoading(false));

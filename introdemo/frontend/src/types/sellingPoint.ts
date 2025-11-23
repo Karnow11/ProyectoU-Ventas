@@ -2,6 +2,7 @@ export type SPZone = "Otro"|"Casino"|"Salita Zone"|"Tokki Zone"|"Biblioteca"|"Ha
 export type ProductType = "Otro"|"Comida"|"Ropa"|"Manualidades"|"Libros"
 export type sellingPoint = {
     id: string;
+    user_id: string;
     static_point: boolean;
     name: string;
     description: string;

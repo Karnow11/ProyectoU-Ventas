@@ -52,4 +52,10 @@ router.post("/", async (request, response) => {
   response.status(201).json(savedUser);
 })
 
+router.get("/:id", async (request, response) => {
+  const user_id = request.params.id
+  const user = await User.findById(user_id);
+  response.json(user);
+});
+
 export default router;
