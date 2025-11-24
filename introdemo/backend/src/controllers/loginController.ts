@@ -16,7 +16,7 @@ router.post("/", async (request, response) => {
 
     if (!passwordCorrect) {
       response.status(401).json({
-        error: "invalid username or password",
+        error: "Invalid username or password",
       });
     } else {
       const userForToken = {
@@ -33,11 +33,11 @@ router.post("/", async (request, response) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
       });
-      response.status(200).send({name: user.username });
+      response.status(200).send({id: user.id, username: user.username });
     }
   } else {
     response.status(401).json({
-      error: "invalid username or password",
+      error: "Invalid username or password",
     });
   }
 });
@@ -45,10 +45,10 @@ router.post("/", async (request, response) => {
 router.get("/me", withUser, async (request, response, next) => {
   const body = request.body;
   const user = await User.findById(request.userId);
-  response.status(200).json(user ? { name: user.username } : null);
+  response.status(200).json(user ? { id: user.id, username: user.username } : null);
 });
 
-router.post("/logout", (request, response) =>  {
+router.post("/logout", (_, response) =>  {
   response.clearCookie("token");
   response.status(200).send({
     message: "Logged out successfully"

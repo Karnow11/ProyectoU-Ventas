@@ -1,100 +1,127 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import axios from "axios"
+import { useNavigate } from "react-router-dom";
 import {
   Link,
   Route,
   BrowserRouter as Router,
   Routes,
-  useNavigate,
   useParams,
 } from "react-router-dom";
 import type { sellingPoint } from './types/sellingPoint.ts';
 import SellingPointComp from './components/SellingPoint.tsx';
 import SP_list from "./components/sp_list.tsx";
 import FormSP from "./components/FormSP.tsx";
+import MapStaticSP from "./components/MapStaticSP.tsx";
+import SPSearch from "./components/SPSearch.tsx";
+import EditSellingPointComp from "./components/EditSellingPoint.tsx";
 
 import loginService from "./services/login.ts"
 import type {User} from './types/user.ts'
 import Toggle from "./utils/Toggle.tsx";
+import api from "./utils/axiosSecure.ts";
+import UserProfile from "./components/UserProfile.tsx";
 
-const SellingPointList = () => {
-  const navigate = useNavigate();
-  const [id, setId] = useState<string>("");
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  Heading,
+  HStack,
+  Field,
+  Input,
+  Text,
+  VStack,
+  Separator
+} from "@chakra-ui/react";
+import { UserStore } from "./store/user_store.ts";
+
+const InteractiveMap = () =>{
   return (
     <div>
-      <div>
-        <input
-          type="text"
-          placeholder="id del selling point"
-          onChange={(e) => setId(String(e.target.value))}
-        />
-        <button onClick={() => navigate(`/sellingPoint/${id}`)}>Ir al SellingPoint</button>
-      </div>
-      <div>
-        <SP_list/>
-      </div>
+      <MapStaticSP/>
     </div>
   )
 }
 
-const SellingPointSearch = () => {
-  const navigate = useNavigate();
-  const [id, setId] = useState<string>("");
+const SellingPointList = () => {
   return (
-    <div>
-      <div>
-        <input
-          type="text"
-          placeholder="id del selling point"
-          onChange={(e) => setId(String(e.target.value))}
-        />
-        <button onClick={() => navigate(`/sellingPoint/${id}`)}>Ir al SellingPoint</button>
-      </div>
-    </div>
+
+    <Box>
+      <Box mt={4}>
+        <SP_list />
+      </Box>
+    </Box>
+  )
+}
+
+const SellingPointSearch = () => {
+  return (
+    <Box>
+      <SPSearch />
+    </Box>
   )
 }
 
 const FormSellingPoint = () => {
   return (
-    <div>
-      <div>
-        <FormSP/>
-      </div>
-    </div>
+    <Box>
+      <FormSP />
+    </Box>
   )
+}
+
+const EditSellingPointPage = () => {
+  const {id} = useParams();
+  const [sellingPointData, setSellingPointBase] = useState<sellingPoint | null> (null);
+  useEffect(() => {
+    if (!id) return;
+    api.get(`/api/selling_points/${id}`).then((response) => {
+      setSellingPointBase(response.data.selling_point);
+    });
+  }, [id]);
+
+
+  return (
+    <Box>
+      {sellingPointData && <EditSellingPointComp sellingPoint={sellingPointData} />}
+    </Box>
+  )
+
+
+
+
 }
 
 const DetalleSellingPoint = () => {
   const {id} = useParams();
-  const [sellingPointData, setSellingPointBase] = useState<sellingPoint>({
-    id: "",
-    static_point: false,
-    name: "base",
-    description: "base",
-    product_type: "base",
-  });
+  const [sellingPointData, setSellingPointBase] = useState<sellingPoint | null>(null);
 
-  useEffect( () => {
-    console.log(`usamos el useEffect con id :${id}`)
-    axios.get(`http://localhost:3001/api/selling_points/${id}`).then((response) => {
-      console.log("usamos el axios get threads")
-      console.log(response.data);
+  useEffect(() => {
+    if (!id) return;
+    api.get(`/api/selling_points/${id}`).then((response) => {
       setSellingPointBase(response.data.selling_point);
     });
-  }, []);
+  }, [id]);
+
   return (
-    <div>
-      <SellingPointComp sellingPoint = {sellingPointData}/>
-    </div>
+    <Box>
+      {sellingPointData && <SellingPointComp sellingPoint={sellingPointData} />}
+    </Box>
   )
 }
 
 const App = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [user, setUser] = useState<User | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [username_log, setUsernameLog] = useState("");
+  const [password_log, setPasswordLog] = useState("");
+  const [username_create, setUsernameCreate] = useState("");
+  const [password_create, setPasswordCreate] = useState("");
+  const [mail_create, setMailCreate] = useState("")
+  //const [user, setUser] = useState<User | null>(null);
+  const {user, setUser} = UserStore()
+  const [errorMessageLogin, setErrorMessageLogin] = useState<string | null>(null);
+  const [errorMessageCreate, setErrorMessageCreate] = useState<string | null>(null);
 
   useEffect(() => {
     const init = async () => {
@@ -108,16 +135,16 @@ const App = () => {
     event.preventDefault();
     try {
       const user = await loginService.login({
-        username,
-        password,
+        username: username_log,
+        password: password_log,
       });
       setUser(user);
-      setUsername("");
-      setPassword("");
-    } catch (exception) {
-      setErrorMessage("Wrong credentials");
+      setUsernameLog("");
+      setPasswordLog("");
+    } catch (exception: any) {
+      setErrorMessageLogin(exception.response?.data?.error || "");
       setTimeout(() => {
-        setErrorMessage(null);
+        setErrorMessageLogin(null);
       }, 5000);
     }
   };
@@ -127,59 +154,194 @@ const App = () => {
     setUser(null);
   };
 
+  const createUser = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const user = {
+        username: username_create,
+        email: mail_create,
+        password: password_create
+      };
+      await loginService.create(user)
+      setUsernameCreate("")
+      setMailCreate("")
+      setPasswordCreate("")
+    } catch (exception: any) {
+      setErrorMessageCreate(exception.response?.data?.error || "");
+      setTimeout(() => {
+        setErrorMessageCreate(null);
+      }, 5000);
+    }
+  }
+
   return (
     <Router >
-      <div className = "Titulo">
-        <h1>U-Ventas</h1>
-      </div>
+    <Box minH="100vh">
+      <Container maxW="5xl" py={6}>
+        {/* Header */}
+        <Flex
+          as="header"
+          className="Titulo"
+          justify="space-between"
+          align="center"
+          mb={8}
+        >
+          <Heading as="h1" size="lg" color="#e144ba">
+            U-Ventas
+          </Heading>
 
-      <div>
-        {user ? (
-          <div>
-            {user.name}
-            <button onClick={handleLogout}>Logout</button>
-          </div>) : (
-          <Toggle text="Login">
-            <form onSubmit={handleLogin}>
-              <div>
-                username
-                <input type="text" value={username} name="Username"
-                  onChange={({ target }) => setUsername(target.value)}
-                />
-              </div>
-              <div>
-                password
-                <input type="password" value={password} name="Password"
-                  onChange={({ target }) => setPassword(target.value)}
-                />
-              </div>
-              <p style={{ color: "red" }}>{errorMessage}</p>
-              <button type="submit">login</button>
-            </form>
-          </Toggle>)}
-      </div>
+          {user && (
+            <HStack gap={4}>
+              <Link to = {`/profile/${user?.id}`} style={{ color: "#fff", textDecoration: "underline", fontWeight: 500, fontSize:"15px" }}>{user.username}</Link>
+              <Button
+                size="sm"
+                borderColor="#555"
+                colorScheme="teal"
+                color="#e16161"
+                fontSize="sm"
+                onClick={handleLogout}
+              >
+                Cerrar sesión
+              </Button>
+            </HStack>
+          )}
+        </Flex>
 
-      <div className = "NavBar">
-        <br></br>
-        <Link to = "/sellingPointSearch">Busqueda SellingPoints</Link>
-        |
-        <Link to = "/sellingPointList">Listado SellingPoints</Link>
-        |
-        <Link to = "/formSellingPoint">Formulario Nuevo SellingPoint</Link>
-        |
-        <Link to = "/sellingPointList">Notas</Link>
-        |
-        <Link to = "/sellingPointList">Notas</Link>
+        {/* Login / Crear cuenta (solo si no se está autentificado) */}
+        {!user && (
+          <Flex gap={10} align="flex-start" mb={8} wrap="wrap">
+            <Box flex="1" minW="260px">
+              <Toggle text="Iniciar sesión">
+                <Box mt={8}>
+                <form onSubmit={handleLogin}>
+                  <VStack gap={6} align="stretch">
+                    <Field.Root>
+                      <Field.Label>Nombre de usuario</Field.Label>
+                      <Input
+                        type="text"
+                        value={username_log}
+                        name="Username"
+                        onChange={({ target }) =>
+                          setUsernameLog(target.value)
+                        }
+                      />
+                    </Field.Root>
+                    <Field.Root>
+                      <Field.Label>Contraseña</Field.Label>
+                      <Input
+                        type="password"
+                        value={password_log}
+                        name="Password"
+                        onChange={({ target }) =>
+                          setPasswordLog(target.value)
+                        }
+                      />
+                    </Field.Root>
+                    {errorMessageLogin && (
+                      <Text color="red.500" fontSize="sm">
+                        {errorMessageLogin}
+                      </Text>
+                    )}
+                    <Button type="submit" colorScheme="teal" borderColor="#777" w="full">
+                      Acceder
+                    </Button>
+                  </VStack>
+                  </form>
+                </Box>
+              </Toggle>
+            </Box>
 
-      </div>
+            <Box flex="1" minW="260px">
+              <Toggle text="Crear cuenta">
+                <Box mt={8}>
+                  <form onSubmit={createUser}>
+                  <VStack gap={6} align="stretch">
+                    <Field.Root>
+                      <Field.Label>Nombre de usuario</Field.Label>
+                      <Input
+                        type="text"
+                        value={username_create}
+                        name="Username"
+                        onChange={({ target }) =>
+                          setUsernameCreate(target.value)
+                        }
+                      />
+                    </Field.Root>
+                    <Field.Root>
+                      <Field.Label>Correo electrónico</Field.Label>
+                      <Input
+                        type="text"
+                        value={mail_create}
+                        name="Mail"
+                        onChange={({ target }) =>
+                          setMailCreate(target.value)
+                        }
+                      />
+                    </Field.Root>
+                    <Field.Root>
+                      <Field.Label>Contraseña</Field.Label>
+                      <Input
+                        type="password"
+                        value={password_create}
+                        name="Password"
+                        onChange={({ target }) =>
+                          setPasswordCreate(target.value)
+                        }
+                      />
+                    </Field.Root>
+                    {errorMessageCreate && (
+                      <Text color="red.500" fontSize="sm">
+                        {errorMessageCreate}
+                      </Text>
+                    )}
+                    <Button type="submit" colorScheme="teal" w="full">
+                      ¡Crea tu cuenta!
+                    </Button>
+                  </VStack>
+                  </form>
+                </Box>
+              </Toggle>
+            </Box>
+          </Flex>
+        )}
+        
 
-      <Routes>
-        <Route path="/sellingPointList" element={<SellingPointList />} />
-        <Route path="/sellingPointSearch" element={<SellingPointSearch />} />
-        <Route path="/sellingPoint/:id" element={<DetalleSellingPoint />} />
-        <Route path="/formSellingPoint" element={<FormSellingPoint />} />
-      </Routes>
-    </Router>
+        {/* NavBar */}
+        <Box as="nav" className="NavBar" mb={6}>
+          <HStack gap={4} wrap="wrap">
+            <Link to = {`/sellingPointSearch`} style={{ color: "#e681cd", fontWeight: 500 }}>Búsqueda SellingPoints</Link>
+        
+            <Link to = {`/sellingPointList`} style={{ color: "#e681cd", fontWeight: 500 }}>Listado SellingPoints</Link>
+
+            {user && <Link to = {`/formSellingPoint`} style={{ color: "#e681cd", fontWeight: 500 }}>Formulario Nuevo SellingPoint</Link>}
+            
+            <Link to = {`/map`} style={{ color: "#e681cd", fontWeight: 500 }}>Mapa Interactivo</Link>
+
+          </HStack>
+        </Box>
+
+        <Separator my={6} size="xs" variant="dashed" borderColor="gray"/>
+
+        {/* Rutas */}
+        <Routes>
+          <Route path="/sellingPointList" element={<SellingPointList />} />
+          <Route
+            path="/sellingPointSearch"
+            element={<SellingPointSearch />}
+          />
+          <Route
+            path="/sellingPoint/:id"
+            element={<DetalleSellingPoint />}
+          />
+          <Route path="/formSellingPoint" element={<FormSellingPoint />} />
+          <Route path="/profile/:id" element={<UserProfile />} />
+          <Route path="/map" element={<InteractiveMap />} />
+          <Route path="/editsellingPoint/:id" element={<EditSellingPointPage />} />
+        </Routes>
+      </Container>
+
+    </Box>
+  </Router>
   )
 }
 

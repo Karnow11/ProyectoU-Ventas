@@ -221,3 +221,12 @@
     padding: 1em;
   }
 }
+
+.map-view {
+  display: flex;
+  gap: 50px; /* Cambia de 1000px a un valor más razonable */
+  align-items: flex-start; /* Cambiar a flex-start para mejor alineación */
+  justify-content: center; /* Centrar horizontalmente */
+  flex-wrap: wrap; /* Permitir que se envuelvan si no caben */
+  padding: 2em;
+}

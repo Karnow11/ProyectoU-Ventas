@@ -4,6 +4,9 @@ import type Selling_points_Data from "../types/selling_points_data";
 mongoose.set("strictQuery", false);
 
 const sellingPointSchema = new mongoose.Schema<Selling_points_Data>({
+    user_id: {
+        type: String
+    },
     name: {
         type: String,
         minLength: 3,
@@ -23,7 +26,17 @@ const sellingPointSchema = new mongoose.Schema<Selling_points_Data>({
         default: "Otro",
         validate: {
             validator: (valor: string) => {
-                const admitidos = ["Comida","Artesania","Servicios","Ropa"];
+                const admitidos = ["Comida","Libros","Manualidades","Ropa","Otro"];
+                return admitidos.includes(valor);
+            }
+        }
+    },
+    zone: {
+        type: String,
+        default: "Otro",
+        validate: {
+            validator: (valor: string) => {
+                const admitidos = ["Otro","Casino","Salita Zone","Tokki Zone","Biblioteca","Hall Sur","Socalo","Cafeta","Quimica","Minas","Ebria","Espada y Escudo","Fisica","Araña","Electrica","Civil","Geología","IDIEM","Industrias"];
                 return admitidos.includes(valor);
             }
         }

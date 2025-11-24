@@ -3,16 +3,17 @@ dotenv.config();
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import path from "path";
-import SPModel from "./models/selling_points";
+
 import userRouter from "./controllers/userController";
 import loginRouter from "./controllers/loginController";
-//import withUser from "./middlewares/authMiddelwares";
+import withUser from "./middlewares/authMiddelwares";
 import User from "./models/User";
 import cookieParser from "cookie-parser";
 
 import mongoose from "mongoose"; // Add this
 import config from "./utils/config"; // Add this
 import spRouter from "./controllers/selling_points"; // Add this
+import reviewrouter from "./controllers/review_controller"
 
 mongoose.set("strictQuery", false);
 if (config.MONGODB_URI) {
@@ -34,6 +35,7 @@ const app = express();
 app.use(cors({
   origin: "http://localhost:5173",
   credentials: true,
+  exposedHeaders: ["X-CSRF-Token"],
 }));
 
 app.use(express.json());
@@ -52,86 +54,10 @@ const requestLogger = (
 };
 app.use(requestLogger);
 
-
-app.get("/api/selling_points", (request, response) => {
-  SPModel.find({ thread: null }).then((sp) => {
-    response.json(sp);
-  });
-});
-
-app.get("/api/selling_points/:id", (request, response, next) => {
-  const id = request.params.id;
-  const sp = SPModel.findById(id);
-  const reviews = SPModel.find({ thread: id });
-  Promise.all([sp, reviews])
-    .then(([sp, reviews]) => {
-      if (sp) {
-        response.json({ selling_point: sp, reviews: reviews });
-      } else {
-        response.status(404).end();
-      }
-    })
-    .catch((error) => next(error));
-});
-
-app.post("/api/selling_points", async (request, response, next) => {
-  const body = request.body;
-  const token = request.cookies?.token;
-
-  console.log("User ID:", request.userId);
-
-  const post = new SPModel({
-    name: body.name,
-    description: body.description,
-    static_point: body.static_point,
-    product_type: body.product_type
-  });
-
-  post.save()
-    .then((savedPost) => {
-      response.status(201).json(savedPost);
-    })
-    .catch((error) => next(error));
-});
-
-app.post("/api/selling_point/:id", async (request, response, next) => {
-
-  const body = request.body;
-  const SPId = request.params.id;
-
-  const token = request.cookies?.token;
-
-  const post = new SPModel({
-    author: body.author,
-    content: body.content,
-    SP_id: SPId,
-  });
-
-  post.save()
-    .then((savedPost) => {
-      response.status(201).json(savedPost);
-    })
-    .catch((error) => next(error));
-});
-
-app.put("/api/selling_points/:id", (request, response, next) => {
-  const body = request.body;
-  const id = request.params.id;
-
-  SPModel.findByIdAndUpdate(id, body, { new: true })
-    .then((updatedPost) => {
-      if (updatedPost) {
-        response.json(updatedPost);
-      } else {
-        response.status(404).end();
-      }
-    })
-    .catch((error) => next(error));
-});
-
-
 app.use("/api/users", userRouter);
 app.use("/api/login", loginRouter);
+app.use("/api/selling_points", spRouter)
+app.use("/api/reviews", reviewrouter)
 app.use(express.static("dist"));
 
 const errorHandler = (

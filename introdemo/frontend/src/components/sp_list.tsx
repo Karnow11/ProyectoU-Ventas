@@ -1,8 +1,15 @@
 // src/components/SPList.tsx
 import { useEffect, useMemo, useState } from "react";
-import axios from "axios";
 import type { sellingPoint } from "../types/sellingPoint";
 import { Link, useSearchParams } from "react-router-dom";
+import api from "../utils/axiosSecure";
+import {
+  Box,
+  Button,
+  Text,
+  VStack,
+  Heading
+} from "@chakra-ui/react";
 
 type Mode = "all" | "static" | "dynamic";
 
@@ -27,8 +34,8 @@ export default function SPList({ initialMode }: Props) {
   useEffect(() => {
     let on = true;
     setLoading(true);
-    axios
-      .get("http://localhost:3001/api/selling_points")
+    api
+      .get("/api/selling_points")
       .then((r) => on && setItems(r.data))
       .catch((e) => on && setErr(e?.message ?? "Error cargando puntos"))
       .finally(() => on && setLoading(false));
@@ -54,55 +61,72 @@ export default function SPList({ initialMode }: Props) {
   };
 
   return (
-    <div>
+    <Box>
       {/* Switch de modos */}
-      <div style={{ display: "inline-flex", gap: 8, marginBottom: 12 }}>
+      <Box display="inline-flex" gap={2} mb={3}>
         {(["all", "static", "dynamic"] as Mode[]).map((m) => {
-          const label = m === "all" ? "Todos" : m === "static" ? "Estáticos" : "Dinámicos";
+          const label =
+            m === "all" ? "Todos" : m === "static" ? "Estáticos" : "Dinámicos";
           const active = mode === m;
           return (
-            <button
+            <Button
               key={m}
               type="button"
               onClick={() => setModeBoth(m)}
               aria-pressed={active}
-              style={{
-                padding: "6px 12px",
-                borderRadius: 6,
-                border: "1px solid #777777",
-                cursor: "pointer",
-              }}
+              size="sm"
+              variant={active ? "solid" : "outline"}
+              colorPalette="teal"
             >
               {label}
-            </button>
+            </Button>
           );
         })}
-      </div>
+      </Box>
 
       {/* Contenido */}
-      {loading && <p>Cargando...</p>}
-      {err && <p style={{ color: "crimson" }}>{err}</p>}
+      {loading && <Text>Cargando...</Text>}
+      {err && <Text color="red.500">{err}</Text>}
       {!loading && !err && (
         <>
           {!filtered.length ? (
-            <p>No hay puntos para mostrar.</p>
+            <Text>No hay puntos para mostrar.</Text>
           ) : (
-            <ul>
-              {filtered.map((sp) => (
-                <li className="sellingpoint-li" key={sp.id}>
-                  <div className="sp-li-title">
-                    <Link to={`/sellingPoint/${sp.id}`}>
-                      Nombre: {sp.name} — #{sp.id}
-                    </Link>
-                  </div>
-                  <p>Tipo de puesto: {sp.static_point ? "Estático" : "Dinámico"}</p>
-                  <p>Tipo de producto: {sp.product_type}</p>
-                </li>
-              ))}
-            </ul>
+            
+
+            <VStack gap={4} align="stretch">
+                {filtered.map((sp) => (
+                    <Box
+                        key={sp.id}
+                        p={4}
+                        borderWidth="1px"
+                        borderRadius="md"
+                        borderColor="gray.600"
+                        _hover={{ borderColor: "gray.700", shadow: "sm" }}
+                        transition="all 0.2s"
+                    >
+                        <Link to={`/sellingPoint/${sp.id}`}>
+                            <Heading as="h4" size="sm" color="#ffb5df" mb={2}>
+                                {sp.name}
+                            </Heading>
+                        </Link>
+                        <Text fontSize="sm" color="gray.400">
+                            Tipo de puesto: {sp.static_point ? "Estático" : "Dinámico"}
+                        </Text>
+                        <Text fontSize="sm" color="gray.400">
+                            Tipo de producto: {sp.product_type}
+                        </Text>
+                        {sp.zone && (
+                            <Text fontSize="sm" color="gray.400">
+                                Zona: {sp.zone}
+                            </Text>
+                        )}
+                    </Box>
+                ))}
+            </VStack>
           )}
         </>
       )}
-    </div>
+    </Box>
   );
 }
