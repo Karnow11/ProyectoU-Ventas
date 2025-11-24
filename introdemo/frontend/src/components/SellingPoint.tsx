@@ -114,6 +114,15 @@ const SellingPointComp = ({ sellingPoint } : Prop) => {
               Punto:{" "}{sellingPoint.static_point ? "Estático" : "Dinámico"}
             </Text>
             <Text>
+              - 
+              Zona:{" "}{sellingPoint.zone}
+            </Text>
+            <Text>
+              - 
+              Descripción:
+            </Text>
+          <Text>{sellingPoint.description}</Text>
+            <Text>
               Calificación de la comunidad:{" "}
               {avg !== null ? (
                 <>
@@ -126,9 +135,7 @@ const SellingPointComp = ({ sellingPoint } : Prop) => {
           </VStack>
         </Box>
 
-        <Box className="sellingPoint-content">
-          <Text>{sellingPoint.description}</Text>
-        </Box>
+       
         
         {(!user || sellingPoint.user_id === user?.id || reviews.reduce((acc, rev) => acc && (rev.user_id === user?.id), false)) ?
         <></> :

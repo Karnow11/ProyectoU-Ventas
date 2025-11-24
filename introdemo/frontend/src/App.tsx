@@ -336,6 +336,7 @@ const App = () => {
           <Route path="/formSellingPoint" element={<FormSellingPoint />} />
           <Route path="/profile/:id" element={<UserProfile />} />
           <Route path="/map" element={<InteractiveMap />} />
+          <Route path="/editsellingPoint/:id" element={<EditSellingPointPage />} />
         </Routes>
       </Container>
 

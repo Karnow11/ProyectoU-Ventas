@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type { SPZone, ProductType, sellingPoint } from "../types/sellingPoint";
 import { useNavigate } from "react-router-dom";
 import { SPStore } from '../store/SP_store';
@@ -64,7 +64,7 @@ const EditSellingPoint = ({ sellingPoint }: Props) => {
 
   return (
     <>
-    <div className='formSP-container'>
+    <div style={{backgroundColor: "#303030"}}  className='formSP-container'>
         <h1>Editar punto de venta</h1>
       <form onSubmit={updateSP} className = "formSP">
           <label>
@@ -91,7 +91,7 @@ const EditSellingPoint = ({ sellingPoint }: Props) => {
           <br></br>
           <label>
             Tipo de producto o servicio 
-            <select value={product_type} onChange={handleProduct_typeChange}>
+            <select value={product_type} style={{backgroundColor: "white"}}  onChange={handleProduct_typeChange}>
               <option value="Comida">Comida</option>
               <option value="Libros">Libros</option>
               <option value="Manualidades">Manualidades</option>
@@ -102,7 +102,8 @@ const EditSellingPoint = ({ sellingPoint }: Props) => {
         <br></br>
         <label>
         Zona de servicio 
-        <select value={zone} onChange={handleZoneChange} required>
+        
+        <select value={zone} style={{backgroundColor: "white"}} onChange={handleZoneChange} required>
           <option value="">Selecciona una zona</option>
           <option value="Araña">Araña</option>
           <option value="Biblioteca">Biblioteca</option>
