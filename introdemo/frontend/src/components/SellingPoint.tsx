@@ -58,10 +58,15 @@ const SellingPointComp = ({ sellingPoint } : Prop) => {
     <div>
       <div className={containerClass}>
         <div className='point-title'>
-          <p>- Nombre: {sellingPoint.name || "SellingPoint sin nombre"} - Vende: {sellingPoint.product_type}</p>
+          <p>- Nombre: {sellingPoint.name || "SellingPoint sin nombre"}</p>
+          <br />
+          <p>- Vende: {sellingPoint.product_type}</p>
+          <br />
           <p>- Creador: <Link to = {`/profile/${user?.id}`}>{user?.username}</Link></p>
-          <p>{sellingPoint.static_point ? "Estatico" : "Dinamico"} - #{sellingPoint.id}</p>
-          <p>Calificación de la comunidad: {reviews.length !== 0 ? <>{reviews.reduce((acum, rev) => rev.qualification + acum, 0) / reviews.length}/5</> : <>No hay Reseñas todavía</>}</p>
+          <br />
+          <p>- Punto: {sellingPoint.static_point ? "Estático" : "Dinámico"}</p>
+          <br />
+          <p>- Calificación: {reviews.length !== 0 ? <>{reviews.reduce((acum, rev) => rev.qualification + acum, 0) / reviews.length}/5</> : <>No hay Reseñas todavía</>}</p>
         </div>
         <div className='sellingPoint-content'>
           <p>{sellingPoint.description}</p>
@@ -91,7 +96,7 @@ const SellingPointComp = ({ sellingPoint } : Prop) => {
           <ul>
             {reviews.map((rev, id) => (
               <li key={id}>
-                <p>Qualification: {rev.qualification}</p>
+                <p>Calificación: {rev.qualification}</p>
                 <p>{rev.content}</p>
               </li>
             ))}

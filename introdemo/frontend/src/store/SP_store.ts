@@ -19,7 +19,7 @@ export const SPStore = create<SPState>((set) => ({
 
     fetchSP: async () => {
         const res =  await getAll();
-        const allSP = Array.isArray(res)? res : []
+        const allSP = Array.isArray(res) ? res : []
         set({SP: allSP});
 
     },
@@ -36,5 +36,4 @@ export const SPStore = create<SPState>((set) => ({
         const filteredSP = await getSellingPointsByStoreName(name);
         set({SP: filteredSP})
     }
-}
-));
+}));
