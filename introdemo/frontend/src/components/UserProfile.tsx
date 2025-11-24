@@ -10,6 +10,12 @@ import { HStack } from "@chakra-ui/react"
 import { SPElimModal } from './EliminateModal' 
 import { SPStore } from "../store/SP_store"
 import { UserStore } from "../store/user_store"
+import {
+    Box,
+    Heading,
+    Text,
+    VStack,
+  } from "@chakra-ui/react";
 
 const UserProfile = () => {
     const {id} = useParams()
@@ -41,6 +47,39 @@ const UserProfile = () => {
     const isOwner = user?.id === userPag?.id;
 
     return (
+        <Box>
+      <Heading as="h1" size="lg" mb={2}>
+        {user?.username}
+      </Heading>
+      <Text mb={4}>e-mail: {user?.email}</Text>
+
+      <VStack as="ul" align="stretch" gap={3}>
+        {selling_points.map((sp) => (
+          <Box
+            as="li"
+            className="sellingpoint-li"
+            key={sp.id}
+            p={3}
+            borderWidth="1px"
+            borderRadius="md"
+          >
+            <div className="sp-li-title">
+              <Link to={`/sellingPoint/${sp.id}`}>
+                Nombre: {sp.name} — #{sp.id}
+              </Link>
+            </div>
+            <Text fontSize="sm">
+              Tipo de puesto: {sp.static_point ? "Estático" : "Dinámico"}
+            </Text>
+            <Text fontSize="sm">
+              Tipo de producto: {sp.product_type}
+            </Text>
+          </Box>
+        ))}
+      </VStack>
+    </Box>
+
+        /*
         <div>
             <h1>{userPag?.username}</h1>
             <p>e-mail: {userPag?.email}</p>
@@ -82,6 +121,7 @@ const UserProfile = () => {
                 />
             )}
         </div>
+        */
     )
 }
 

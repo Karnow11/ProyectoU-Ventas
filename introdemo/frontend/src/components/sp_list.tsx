@@ -3,6 +3,12 @@ import { useEffect, useMemo, useState } from "react";
 import type { sellingPoint } from "../types/sellingPoint";
 import { Link, useSearchParams } from "react-router-dom";
 import api from "../utils/axiosSecure";
+import {
+  Box,
+  Button,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 
 type Mode = "all" | "static" | "dynamic";
 
@@ -54,8 +60,69 @@ export default function SPList({ initialMode }: Props) {
   };
 
   return (
-    <div>
+    <Box>
       {/* Switch de modos */}
+      <Box display="inline-flex" gap={2} mb={3}>
+        {(["all", "static", "dynamic"] as Mode[]).map((m) => {
+          const label =
+            m === "all" ? "Todos" : m === "static" ? "Estáticos" : "Dinámicos";
+          const active = mode === m;
+          return (
+            <Button
+              key={m}
+              type="button"
+              onClick={() => setModeBoth(m)}
+              aria-pressed={active}
+              size="sm"
+              variant={active ? "solid" : "outline"}
+              colorPalette="teal"
+            >
+              {label}
+            </Button>
+          );
+        })}
+      </Box>
+
+      {/* Contenido */}
+      {loading && <Text>Cargando...</Text>}
+      {err && <Text color="red.500">{err}</Text>}
+      {!loading && !err && (
+        <>
+          {!filtered.length ? (
+            <Text>No hay puntos para mostrar.</Text>
+          ) : (
+            <VStack as="ul" align="stretch" gap={2}>
+              {filtered.map((sp) => (
+                <Box
+                  as="li"
+                  className="sellingpoint-li"
+                  key={sp.id}
+                  p={3}
+                  borderWidth="1px"
+                  borderRadius="md"
+                >
+                  <div className="sp-li-title">
+                    <Link to={`/sellingPoint/${sp.id}`}>
+                      Nombre: {sp.name} — #{sp.id}
+                    </Link>
+                  </div>
+                  <Text fontSize="sm">
+                    Tipo de puesto: {sp.static_point ? "Estático" : "Dinámico"}
+                  </Text>
+                  <Text fontSize="sm">
+                    Tipo de producto: {sp.product_type}
+                  </Text>
+                </Box>
+              ))}
+            </VStack>
+          )}
+        </>
+      )}
+    </Box>
+
+    /*
+    <div>
+      {/* Switch de modos *//*}
       <div style={{ display: "inline-flex", gap: 8, marginBottom: 12 }}>
         {(["all", "static", "dynamic"] as Mode[]).map((m) => {
           const label = m === "all" ? "Todos" : m === "static" ? "Estáticos" : "Dinámicos";
@@ -79,7 +146,7 @@ export default function SPList({ initialMode }: Props) {
         })}
       </div>
 
-      {/* Contenido */}
+      {/* Contenido *//*}
       {loading && <p>Cargando...</p>}
       {err && <p style={{ color: "crimson" }}>{err}</p>}
       {!loading && !err && (
@@ -104,5 +171,6 @@ export default function SPList({ initialMode }: Props) {
         </>
       )}
     </div>
+    */
   );
 }

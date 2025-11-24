@@ -177,7 +177,7 @@ const App = () => {
     <Router >
       <Box minH="100vh">
         <Container maxW="5xl" py={6}>
-          {/* Header / Título */}
+          {/* Header */}
           <Flex
             as="header"
             className="Titulo"
@@ -204,7 +204,7 @@ const App = () => {
             )}
           </Flex>
 
-          {/* Login / Create Account (solo si no hay usuario) */}
+          {/* Login / Crear cuenta (solo si no se está autentificado) */}
           {!user && (
             <Flex gap={6} align="flex-start" mb={8} wrap="wrap">
               <Box flex="1" minW="260px">
@@ -308,7 +308,7 @@ const App = () => {
           )}
           
 
-          {/* NavBar con Chakra */}
+          {/* NavBar */}
           <Box as="nav" className="NavBar" mb={6}>
             <HStack gap={4} wrap="wrap">
               <Link to = {`/sellingPointSearch`} style={{ color: "#285E61", fontWeight: 500 }}>Búsqueda SellingPoints</Link>
