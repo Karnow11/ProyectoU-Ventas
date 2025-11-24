@@ -6,7 +6,6 @@ import type { sellingPoint } from "../types/sellingPoint"
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { IconButton } from '@mui/material'
-import { HStack } from "@chakra-ui/react"
 import { SPElimModal } from './EliminateModal' 
 import { SPStore } from "../store/SP_store"
 import { UserStore } from "../store/user_store"
@@ -15,6 +14,7 @@ import {
     Heading,
     Text,
     VStack,
+    HStack,
   } from "@chakra-ui/react";
 
 const UserProfile = () => {
@@ -49,9 +49,9 @@ const UserProfile = () => {
     return (
         <Box>
       <Heading as="h1" size="lg" mb={2}>
-        {user?.username}
+        {userPag?.username}
       </Heading>
-      <Text mb={4}>e-mail: {user?.email}</Text>
+      <Text mb={4}>e-mail: {userPag?.email}</Text>
 
       <VStack as="ul" align="stretch" gap={3}>
         {selling_points.map((sp) => (
@@ -59,69 +59,54 @@ const UserProfile = () => {
             as="li"
             className="sellingpoint-li"
             key={sp.id}
-            p={3}
+            p={4}
             borderWidth="1px"
             borderRadius="md"
+            _hover={{ borderColor: "teal.400", shadow: "sm" }}
+            transition="all 0.2s"
           >
-            <div className="sp-li-title">
-              <Link to={`/sellingPoint/${sp.id}`}>
-                Nombre: {sp.name} — #{sp.id}
-              </Link>
-            </div>
-            <Text fontSize="sm">
+            <Link to={`/sellingPoint/${sp.id}`}>
+              <Heading as="h4" size="sm" color="teal.600" mb={2}>
+                {sp.name} — #{sp.id}
+              </Heading>
+            </Link>
+            <Text fontSize="sm" color="gray.600">
               Tipo de puesto: {sp.static_point ? "Estático" : "Dinámico"}
             </Text>
-            <Text fontSize="sm">
+            <Text fontSize="sm" color="gray.600">
               Tipo de producto: {sp.product_type}
             </Text>
+            
+            {isOwner && (
+              <HStack gap={2} mt={3} justify="center">
+                <Link to={`/editsellingPoint/${sp.id}`}>
+                  <IconButton color="primary" size="small" aria-label="editar">
+                    <EditIcon />
+                  </IconButton>
+                </Link>
+                <IconButton
+                  color="error"
+                  size="small"
+                  aria-label="eliminar"
+                  onClick={() => openModal(sp.id)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </HStack>
+            )}
           </Box>
         ))}
       </VStack>
-    </Box>
 
-        /*
-        <div>
-            <h1>{userPag?.username}</h1>
-            <p>e-mail: {userPag?.email}</p>
-            <ul>
-                {selling_points.map(sp => (
-                <li className="sellingpoint-li" key={sp.id}>
-                    <div className="sp-li-title">
-                        <Link to={`/sellingPoint/${sp.id}`}>
-                            Nombre: {sp.name} — #{sp.id}
-                        </Link>
-                    </div>
-                    <p>Tipo de puesto: {sp.static_point ? "Estático" : "Dinámico"}</p>
-                    <p>Tipo de producto: {sp.product_type}</p>
-                    {isOwner && (
-                        <HStack gap={2} mt={2} justify="center">
-                            <Link to={`/editsellingPoint/${sp.id}`}>
-                                <IconButton color="primary" size="small" aria-label="editar">
-                                    <EditIcon />
-                                </IconButton>
-                            </Link>
-                            <IconButton
-                              color="error"
-                              size="small"
-                              aria-label="eliminar"
-                              onClick={() => openModal(sp.id)}>
-                                <DeleteIcon />
-                            </IconButton>
-                        </HStack>
-                    )}
-                </li>
-                ))}
-            </ul>
-            {isOwner && (
-                <SPElimModal 
-                    isOpened={modalOpened} 
-                    sellingPoint={selectedSP} 
-                    openModal={openModal}
-                    onSuccess={loadUserSellingPoints}
-                />
-            )}
-        </div>
-        */
+      {isOwner && (
+        <SPElimModal 
+          isOpened={modalOpened} 
+          sellingPoint={selectedSP} 
+          openModal={openModal}
+          onSuccess={loadUserSellingPoints}
+        />
+      )}
+    </Box>
     )
 }
 
