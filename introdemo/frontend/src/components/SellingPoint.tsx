@@ -130,7 +130,7 @@ const SellingPointComp = ({ sellingPoint } : Prop) => {
           <Text>{sellingPoint.description}</Text>
         </Box>
         
-        {(sellingPoint.user_id === user?.id || reviews.reduce((acc, rev) => acc && (rev.user_id === user?.id), false)) ?
+        {(!user || sellingPoint.user_id === user?.id || reviews.reduce((acc, rev) => acc && (rev.user_id === user?.id), false)) ?
         <></> :
         <form onSubmit={onSubmit} className="point-title">
           {/* Falta verificar si el id del estado global esta en la lista

@@ -200,29 +200,36 @@ const MapStaticSP = () => {
         <Heading as="h3" size="md" mb={2}>
           {filterZone || "Todas las zonas"}
         </Heading>
-        <VStack align="stretch" gap={3}>
-          {SP?.map((sp) => (
-            <Box
-              key={sp.id}
-              p={3}
-              borderWidth="1px"
-              borderRadius="md"
-              className="sellingpoint-li"
-            >
-              <div className="sp-li-title">
-                <Link to={`/sellingPoint/${sp.id}`}>
-                  Nombre: {sp.name} — #{sp.id}
-                </Link>
-              </div>
-              <Text fontSize="sm">
-                Tipo de puesto: {sp.static_point ? "Estático" : "Dinámico"}
-              </Text>
-              <Text fontSize="sm">
-                Tipo de producto: {sp.product_type}
-              </Text>
-            </Box>
-          ))}
-        </VStack>
+        <VStack gap={4} align="stretch">
+                {SP?.map((sp) => (
+                    <Box
+                        key={sp.id}
+                        p={4}
+                        borderWidth="1px"
+                        borderRadius="md"
+                        borderColor="gray.600"
+                        _hover={{ borderColor: "gray.700", shadow: "sm" }}
+                        transition="all 0.2s"
+                    >
+                        <Link to={`/sellingPoint/${sp.id}`}>
+                            <Heading as="h4" size="sm" color="#ffb5df" mb={2}>
+                                {sp.name}
+                            </Heading>
+                        </Link>
+                        <Text fontSize="sm" color="gray.400">
+                            Tipo de puesto: {sp.static_point ? "Estático" : "Dinámico"}
+                        </Text>
+                        <Text fontSize="sm" color="gray.400">
+                            Tipo de producto: {sp.product_type}
+                        </Text>
+                        {sp.zone && (
+                            <Text fontSize="sm" color="gray.400">
+                                Zona: {sp.zone}
+                            </Text>
+                        )}
+                    </Box>
+                ))}
+            </VStack>
       </Box>
     </Box>
 

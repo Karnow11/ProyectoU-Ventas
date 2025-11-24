@@ -8,6 +8,7 @@ import {
   Button,
   Text,
   VStack,
+  Heading
 } from "@chakra-ui/react";
 
 type Mode = "all" | "static" | "dynamic";
@@ -91,86 +92,41 @@ export default function SPList({ initialMode }: Props) {
           {!filtered.length ? (
             <Text>No hay puntos para mostrar.</Text>
           ) : (
-            <VStack as="ul" align="stretch" gap={2}>
-              {filtered.map((sp) => (
-                <Box
-                  as="li"
-                  className="sellingpoint-li"
-                  key={sp.id}
-                  p={3}
-                  borderWidth="1px"
-                  borderRadius="md"
-                >
-                  <div className="sp-li-title">
-                    <Link to={`/sellingPoint/${sp.id}`}>
-                      Nombre: {sp.name} — #{sp.id}
-                    </Link>
-                  </div>
-                  <Text fontSize="sm">
-                    Tipo de puesto: {sp.static_point ? "Estático" : "Dinámico"}
-                  </Text>
-                  <Text fontSize="sm">
-                    Tipo de producto: {sp.product_type}
-                  </Text>
-                </Box>
-              ))}
+            
+
+            <VStack gap={4} align="stretch">
+                {filtered.map((sp) => (
+                    <Box
+                        key={sp.id}
+                        p={4}
+                        borderWidth="1px"
+                        borderRadius="md"
+                        borderColor="gray.600"
+                        _hover={{ borderColor: "gray.700", shadow: "sm" }}
+                        transition="all 0.2s"
+                    >
+                        <Link to={`/sellingPoint/${sp.id}`}>
+                            <Heading as="h4" size="sm" color="#ffb5df" mb={2}>
+                                {sp.name}
+                            </Heading>
+                        </Link>
+                        <Text fontSize="sm" color="gray.400">
+                            Tipo de puesto: {sp.static_point ? "Estático" : "Dinámico"}
+                        </Text>
+                        <Text fontSize="sm" color="gray.400">
+                            Tipo de producto: {sp.product_type}
+                        </Text>
+                        {sp.zone && (
+                            <Text fontSize="sm" color="gray.400">
+                                Zona: {sp.zone}
+                            </Text>
+                        )}
+                    </Box>
+                ))}
             </VStack>
           )}
         </>
       )}
     </Box>
-
-    /*
-    <div>
-      {/* Switch de modos *//*}
-      <div style={{ display: "inline-flex", gap: 8, marginBottom: 12 }}>
-        {(["all", "static", "dynamic"] as Mode[]).map((m) => {
-          const label = m === "all" ? "Todos" : m === "static" ? "Estáticos" : "Dinámicos";
-          const active = mode === m;
-          return (
-            <button
-              key={m}
-              type="button"
-              onClick={() => setModeBoth(m)}
-              aria-pressed={active}
-              style={{
-                padding: "6px 12px",
-                borderRadius: 6,
-                border: "1px solid #777777",
-                cursor: "pointer",
-              }}
-            >
-              {label}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Contenido *//*}
-      {loading && <p>Cargando...</p>}
-      {err && <p style={{ color: "crimson" }}>{err}</p>}
-      {!loading && !err && (
-        <>
-          {!filtered.length ? (
-            <p>No hay puntos para mostrar.</p>
-          ) : (
-            <ul>
-              {filtered.map((sp) => (
-                <li className="sellingpoint-li" key={sp.id}>
-                  <div className="sp-li-title">
-                    <Link to={`/sellingPoint/${sp.id}`}>
-                      Nombre: {sp.name} — #{sp.id}
-                    </Link>
-                  </div>
-                  <p>Tipo de puesto: {sp.static_point ? "Estático" : "Dinámico"}</p>
-                  <p>Tipo de producto: {sp.product_type}</p>
-                </li>
-              ))}
-            </ul>
-          )}
-        </>
-      )}
-    </div>
-    */
   );
 }

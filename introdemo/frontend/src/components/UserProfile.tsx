@@ -53,30 +53,33 @@ const UserProfile = () => {
       </Heading>
       <Text mb={4}>e-mail: {userPag?.email}</Text>
 
-      <VStack as="ul" align="stretch" gap={3}>
-        {selling_points.map((sp) => (
-          <Box
-            as="li"
-            className="sellingpoint-li"
-            key={sp.id}
-            p={4}
-            borderWidth="1px"
-            borderRadius="md"
-            _hover={{ borderColor: "teal.400", shadow: "sm" }}
-            transition="all 0.2s"
-          >
-            <Link to={`/sellingPoint/${sp.id}`}>
-              <Heading as="h4" size="sm" color="teal.600" mb={2}>
-                {sp.name} — #{sp.id}
-              </Heading>
-            </Link>
-            <Text fontSize="sm" color="gray.600">
-              Tipo de puesto: {sp.static_point ? "Estático" : "Dinámico"}
-            </Text>
-            <Text fontSize="sm" color="gray.600">
-              Tipo de producto: {sp.product_type}
-            </Text>
-            
+      <VStack gap={4} align="stretch">
+                {selling_points.map((sp) => (
+                    <Box
+                        key={sp.id}
+                        p={4}
+                        borderWidth="1px"
+                        borderRadius="md"
+                        borderColor="gray.600"
+                        _hover={{ borderColor: "gray.700", shadow: "sm" }}
+                        transition="all 0.2s"
+                    >
+                        <Link to={`/sellingPoint/${sp.id}`}>
+                            <Heading as="h4" size="sm" color="#ffb5df" mb={2}>
+                                {sp.name}
+                            </Heading>
+                        </Link>
+                        <Text fontSize="sm" color="gray.400">
+                            Tipo de puesto: {sp.static_point ? "Estático" : "Dinámico"}
+                        </Text>
+                        <Text fontSize="sm" color="gray.400">
+                            Tipo de producto: {sp.product_type}
+                        </Text>
+                        {sp.zone && (
+                            <Text fontSize="sm" color="gray.400">
+                                Zona: {sp.zone}
+                            </Text>
+                        )}
             {isOwner && (
               <HStack gap={2} mt={3} justify="center">
                 <Link to={`/editsellingPoint/${sp.id}`}>

@@ -32,26 +32,26 @@ const SPSearch = () => {
         <Box>
             <HStack mb={4} gap={3} align="flex-end">
                 <Field.Root maxW="360px" flex="1">
-                    <Field.Label fontSize="sm">Buscar por nombre</Field.Label>
+                    <Field.Label mb={2} fontSize="sm">Buscador por nombre</Field.Label>
                     <Input
                         type="text"
+                        borderColor="#555"
                         value={searchTerm}
                         onChange={handleInputChange}
-                        placeholder="Buscar por nombre..."
+                        placeholder="Buscar SellingPoint por nombre..."
                     />
                 </Field.Root>
                 <Button
                     colorScheme="teal"
                     onClick={handleSearch}
+                    borderColor="#777"
+                    fontSize="sm"
                 >
                     Buscar
                 </Button>
             </HStack>
 
             <Box mt={6}>
-                <Heading as="h3" size="md" mb={4} color="teal.600">
-                    Buscador de SP
-                </Heading>
                 
                 {SP && SP.length > 0 ? (
                     <VStack gap={4} align="stretch">
@@ -61,23 +61,23 @@ const SPSearch = () => {
                                 p={4}
                                 borderWidth="1px"
                                 borderRadius="md"
-                                borderColor="gray.200"
-                                _hover={{ borderColor: "teal.400", shadow: "sm" }}
+                                borderColor="gray.600"
+                                _hover={{ borderColor: "gray.700", shadow: "sm" }}
                                 transition="all 0.2s"
                             >
                                 <Link to={`/sellingPoint/${sp.id}`}>
-                                    <Heading as="h4" size="sm" color="teal.600" mb={2}>
-                                        {sp.name} — #{sp.id}
+                                    <Heading as="h4" size="sm" color="#ffb5df" mb={2}>
+                                        {sp.name}
                                     </Heading>
                                 </Link>
-                                <Text fontSize="sm" color="gray.600">
+                                <Text fontSize="sm" color="gray.400">
                                     Tipo de puesto: {sp.static_point ? "Estático" : "Dinámico"}
                                 </Text>
-                                <Text fontSize="sm" color="gray.600">
+                                <Text fontSize="sm" color="gray.400">
                                     Tipo de producto: {sp.product_type}
                                 </Text>
                                 {sp.zone && (
-                                    <Text fontSize="sm" color="gray.600">
+                                    <Text fontSize="sm" color="gray.400">
                                         Zona: {sp.zone}
                                     </Text>
                                 )}
@@ -90,7 +90,7 @@ const SPSearch = () => {
                         textAlign="center"
                         borderWidth="1px"
                         borderRadius="md"
-                        borderColor="gray.200"
+                        border="none"
                     >
                         <Text color="gray.500">
                             Ingresa un término de búsqueda para ver resultados

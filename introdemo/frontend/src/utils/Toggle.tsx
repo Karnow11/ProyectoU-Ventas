@@ -5,7 +5,7 @@ const Toggle = ({ text, children }: { text: string, children: React.ReactNode })
 
     return (
     <>
-        <Button onClick={() => setShowing(!showing)}>{text + " " + (showing ? "˅" : ">")}</Button>
+        <Button fontSize="sm" borderColor="#777" onClick={() => setShowing(!showing)}>{text + " " + (showing ? "˅" : ">")}</Button>
         {showing ? children : <></>}
     </>
     )
