@@ -34,6 +34,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { UserStore } from "./store/user_store.ts";
 
 const InteractiveMap = () =>{
   return (
@@ -44,9 +45,6 @@ const InteractiveMap = () =>{
 }
 
 const SellingPointList = () => {
-  const navigate = useNavigate();
-  const [id, setId] = useState<string>("");
-
   return (
 
     <Box>
@@ -98,14 +96,6 @@ const EditSellingPointPage = () => {
 const DetalleSellingPoint = () => {
   const {id} = useParams();
   const [sellingPointData, setSellingPointBase] = useState<sellingPoint | null>(null);
-  /*const [sellingPointData, setSellingPointBase] = useState<sellingPoint>({
-    id: "",
-    static_point: false,
-    name: "base",
-    description: "base",
-    product_type: "Comida",
-    user_id: "null"
-  });*/
 
   useEffect(() => {
     if (!id) return;
@@ -118,12 +108,6 @@ const DetalleSellingPoint = () => {
     <Box>
       {sellingPointData && <SellingPointComp sellingPoint={sellingPointData} />}
     </Box>
-
-    /*
-    <div>
-      {sellingPointData && <SellingPointComp sellingPoint={sellingPointData}/>}
-    </div>
-    */
   )
 }
 
@@ -133,7 +117,8 @@ const App = () => {
   const [username_create, setUsernameCreate] = useState("");
   const [password_create, setPasswordCreate] = useState("");
   const [mail_create, setMailCreate] = useState("")
-  const [user, setUser] = useState<User | null>(null);
+  //const [user, setUser] = useState<User | null>(null);
+  const {user, setUser} = UserStore()
   const [errorMessageLogin, setErrorMessageLogin] = useState<string | null>(null);
   const [errorMessageCreate, setErrorMessageCreate] = useState<string | null>(null);
 

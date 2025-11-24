@@ -5,24 +5,20 @@ import api from "../utils/axiosSecure.ts";
 import { Link } from "react-router-dom";
 import type { Review } from "../types/review.ts";
 import { TextField } from "@mui/material";
+import { UserStore } from "../store/user_store.ts";
 
 interface Prop {
     sellingPoint: sellingPoint;
 }
 
 const SellingPointComp = ({ sellingPoint } : Prop) => {
-  const [user, changeUser] = useState<User | null>(null)
+  const {user} = UserStore()
+  const [creator, changeUser] = useState<User | null>(null)
   const [qualification, changeQualification] = useState(0)
   const [content, changeContent] = useState("")
   const [reviews, changeReviews] = useState<Review[]>([])
 
-  console.log(sellingPoint.user_id);
-
   useEffect(() => {
-    /*if (sellingPoint.user_id == null) {
-      console.log("useEffect: user_id es null/undefined, no se llama a la API");
-      return;
-    };*/
 
     api.get(`/api/users/${sellingPoint.user_id}`).then((response) => {
       changeUser(response.data);
@@ -52,22 +48,27 @@ const SellingPointComp = ({ sellingPoint } : Prop) => {
 
   const containerClass = sellingPoint.static_point ? "static-comp" : "nonstatic-comp";
 
-
-  
   return (
     <div>
       <div className={containerClass}>
         <div className='point-title'>
-          <p>- Nombre: {sellingPoint.name || "SellingPoint sin nombre"} - Vende: {sellingPoint.product_type}</p>
-          <p>- Creador: <Link to = {`/profile/${user?.id}`}>{user?.username}</Link></p>
-          <p>{sellingPoint.static_point ? "Estatico" : "Dinamico"} - #{sellingPoint.id}</p>
-          <p>Calificación de la comunidad: {reviews.length !== 0 ? <>{reviews.reduce((acum, rev) => rev.qualification + acum, 0) / reviews.length}/5</> : <>No hay Reseñas todavía</>}</p>
+          <p>- Nombre: {sellingPoint.name || "SellingPoint sin nombre"}</p>
+          <br />
+          <p>- Vende: {sellingPoint.product_type}</p>
+          <br />
+          <p>- Creador: <Link to = {`/profile/${creator?.id}`}>{creator?.username}</Link></p>
+          <br />
+          <p>- Punto: {sellingPoint.static_point ? "Estático" : "Dinámico"}</p>
+          <br />
+          <p>- Calificación: {reviews.length !== 0 ? <>{reviews.reduce((acum, rev) => rev.qualification + acum, 0) / reviews.length}/5</> : <>No hay Reseñas todavía</>}</p>
         </div>
         <div className='sellingPoint-content'>
           <p>{sellingPoint.description}</p>
+          
         </div>
+        {(sellingPoint.user_id === user?.id || reviews.reduce((acc, rev) => acc || (rev.user_id === user?.id), false)) ?
+        <></> :
         <form onSubmit={onSubmit} className='point-title'>
-        {/*Falta verificar si el id del estado global esta en la lista para mostrar el form y eveitar que el mismo usuario reseñe 2 veces*/}
           <h3>Escribe una reseña</h3>
           <label>
             Tu calificación:
@@ -84,14 +85,14 @@ const SellingPointComp = ({ sellingPoint } : Prop) => {
           <TextField type="text" value={content} onChange={(event: React.ChangeEvent<HTMLInputElement>) => changeContent(event.target.value)} placeholder='Reseña' />
           <br />
           <button type="submit">Enviar reseña</button>
-        </form>
+        </form>}
         <div className='point-title'>
           <h3>Reseñas</h3>
           {reviews.length !== 0 ?
           <ul>
             {reviews.map((rev, id) => (
               <li key={id}>
-                <p>Qualification: {rev.qualification}</p>
+                <p>Calificación: {rev.qualification}</p>
                 <p>{rev.content}</p>
               </li>
             ))}
