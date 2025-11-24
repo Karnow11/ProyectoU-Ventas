@@ -6,7 +6,7 @@ import type Review_Data  from "../types/review_data"
 import SPModel from "../models/selling_points";
 import withUser from "../middlewares/authMiddelwares";
 import User from "../models/User";
-
+import { Request, Response } from 'express';
 
 interface SPData {
   selling_point: Selling_points_Data
@@ -97,5 +97,24 @@ router.get("/user/:id", async (request, response, next) => {
     response.json(sp);
   }).catch((error) => next(error));
 })
+
+router.delete("/:id", async (request, response, next) => {
+  try {
+    const { id } = request.params;
+    
+    const sellingPoint = await Selling_point.findById(id);
+    
+    if (!sellingPoint) {
+      return response.status(404).json({ error: 'Selling point no encontrado' });
+    }
+    
+    await Selling_point.findByIdAndDelete(id);
+    
+    response.status(204).end();
+  } catch (error) {
+    console.error('Error deleting selling point:', error);
+    response.status(500).json({ error: 'Error al eliminar selling point' });
+  }
+});
 
 export default router;

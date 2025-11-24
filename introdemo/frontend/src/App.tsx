@@ -14,6 +14,7 @@ import SP_list from "./components/sp_list.tsx";
 import FormSP from "./components/FormSP.tsx";
 import MapStaticSP from "./components/MapStaticSP.tsx";
 import SPSearch from "./components/SPSearch.tsx";
+import EditSellingPointComp from "./components/EditSellingPoint.tsx";
 
 import loginService from "./services/login.ts"
 import type {User} from './types/user.ts'
@@ -70,6 +71,28 @@ const FormSellingPoint = () => {
       <FormSP />
     </Box>
   )
+}
+
+const EditSellingPointPage = () => {
+  const {id} = useParams();
+  const [sellingPointData, setSellingPointBase] = useState<sellingPoint | null> (null);
+  useEffect(() => {
+    if (!id) return;
+    api.get(`/api/selling_points/${id}`).then((response) => {
+      setSellingPointBase(response.data.selling_point);
+    });
+  }, [id]);
+
+
+  return (
+    <Box>
+      {sellingPointData && <EditSellingPointComp sellingPoint={sellingPointData} />}
+    </Box>
+  )
+
+
+
+
 }
 
 const DetalleSellingPoint = () => {
@@ -328,6 +351,7 @@ const App = () => {
             <Route path="/formSellingPoint" element={<FormSellingPoint />} />
             <Route path="/profile/:id" element={<UserProfile />} />
             <Route path="/map" element={<InteractiveMap />} />
+            <Route path="/editsellingPoint/:id" element={<EditSellingPointPage />} />
           </Routes>
         </Container>
       </Box>

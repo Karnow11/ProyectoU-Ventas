@@ -39,6 +39,16 @@ export const addSelling = async ({name, static_point, product_type, description,
     return (await api.post("/api/selling_points", sellingObject)).data;
 }
 
+export const deleteSelling = async (id: string) => {
+  const response = await api.delete(`/api/selling_points/${id}`);
+  return response.data;
+}
+
+export const getSP = async (id: string) => {
+  const response = await api.get(`/api/selling_points/${id}`);
+  return response.data.selling_point ?? response.data;
+};
+
 export const getSellingPointsByZone = async( zone: SPZone) => {
   const allSP: sellingPoint[] = await getAll();
   const StaticSP: sellingPoint[] = allSP.filter(sp => sp.static_point === true);
@@ -52,4 +62,4 @@ export const getSellingPointsByStoreName = async(name: string) => {
   return filteredSP;
 }
 
-export default { getAll, addSelling, getSellingPointsByZone };
+export default { getAll, addSelling, getSellingPointsByZone, deleteSelling };
