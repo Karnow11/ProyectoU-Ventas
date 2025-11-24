@@ -9,3 +9,33 @@ export type sellingPoint = {
     product_type: ProductType;
     zone?: SPZone;
 };
+
+export const PRODUCT_TYPES: ProductType[] = [
+    "Otro",
+    "Comida",
+    "Ropa",
+    "Manualidades",
+    "Libros",
+  ];
+  
+  export const SP_ZONES: SPZone[] = [
+    "Otro",
+    "Casino",
+    "Salita Zone",
+    "Tokki Zone",
+    "Biblioteca",
+    "Hall Sur",
+    "Socalo",
+    "Cafeta",
+    "Quimica",
+    "Minas",
+    "Ebria",
+    "Espada y Escudo",
+    "Fisica",
+    "Araña",
+    "Electrica",
+    "Civil",
+    "Geología",
+    "IDIEM",
+    "Industrias",
+  ];
