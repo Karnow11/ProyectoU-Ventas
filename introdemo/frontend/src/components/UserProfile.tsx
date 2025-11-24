@@ -9,12 +9,14 @@ import { IconButton } from '@mui/material'
 import { HStack } from "@chakra-ui/react"
 import { SPElimModal } from './EliminateModal' 
 import { SPStore } from "../store/SP_store"
+import { UserStore } from "../store/user_store"
 
 const UserProfile = () => {
     const {id} = useParams()
-    const [user, changeUser] = useState<User | null>(null)
+    const [userPag, changeUser] = useState<User | null>(null)
     const [selling_points, changeSP] = useState<sellingPoint[]>([])
     const { openedSP, modalOpened, openModal } = SPStore();
+    const { user } = UserStore();
 
     // Función para cargar los selling points del usuario
     const loadUserSellingPoints = () => {
@@ -35,11 +37,13 @@ const UserProfile = () => {
     }, [id]);
 
     const selectedSP = selling_points.find(sp => sp.id === openedSP?.id);
+    
+    const isOwner = user?.id === userPag?.id;
 
     return (
         <div>
-            <h1>{user?.username}</h1>
-            <p>e-mail: {user?.email}</p>
+            <h1>{userPag?.username}</h1>
+            <p>e-mail: {userPag?.email}</p>
             <ul>
                 {selling_points.map(sp => (
                 <li className="sellingpoint-li" key={sp.id}>
@@ -50,29 +54,33 @@ const UserProfile = () => {
                     </div>
                     <p>Tipo de puesto: {sp.static_point ? "Estático" : "Dinámico"}</p>
                     <p>Tipo de producto: {sp.product_type}</p>
-                    <HStack gap={2} mt={2} justify="center">
-                        <Link to={`/editsellingPoint/${sp.id}`}>
-                            <IconButton color="primary" size="small" aria-label="editar">
-                                <EditIcon />
+                    {isOwner && (
+                        <HStack gap={2} mt={2} justify="center">
+                            <Link to={`/editsellingPoint/${sp.id}`}>
+                                <IconButton color="primary" size="small" aria-label="editar">
+                                    <EditIcon />
+                                </IconButton>
+                            </Link>
+                            <IconButton
+                              color="error"
+                              size="small"
+                              aria-label="eliminar"
+                              onClick={() => openModal(sp.id)}>
+                                <DeleteIcon />
                             </IconButton>
-                        </Link>
-                        <IconButton
-                          color="error"
-                          size="small"
-                          aria-label="eliminar"
-                          onClick={() => openModal(sp.id)}>
-                            <DeleteIcon />
-                        </IconButton>
-                    </HStack>
+                        </HStack>
+                    )}
                 </li>
                 ))}
             </ul>
-            <SPElimModal 
-                isOpened={modalOpened} 
-                sellingPoint={selectedSP} 
-                openModal={openModal}
-                onSuccess={loadUserSellingPoints}
-            />
+            {isOwner && (
+                <SPElimModal 
+                    isOpened={modalOpened} 
+                    sellingPoint={selectedSP} 
+                    openModal={openModal}
+                    onSuccess={loadUserSellingPoints}
+                />
+            )}
         </div>
     )
 }
