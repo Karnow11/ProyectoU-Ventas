@@ -116,6 +116,8 @@ const FormSP = () => {
               type="text"
               value={name}
               onChange={handleNameChange}
+              minLength={3}
+              maxLength={30}
               required
             />
           </Box>
@@ -202,6 +204,9 @@ const FormSP = () => {
               type="text"
               value={description}
               onChange={handledescriptionChange}
+              minLength={10}
+              maxLength={500}
+              required
             />
           </Box>
 
